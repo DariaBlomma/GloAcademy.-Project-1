@@ -33,7 +33,7 @@ console.log(result); //1296
 result = result ** 3; //2176782336
 
 console.log(result.toString().slice(0, 2)); //21
-*/
+
 
 let lang = prompt('Write "ru" or "en" to check the code');
 let rusDays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
@@ -90,4 +90,17 @@ let namePerson = 'Daria';
 namePerson === 'Артем' ? console.log('директор') :
     namePerson === 'Максим' ? console.log('преподаватель') :
     console.log('студент');
+*/
 
+const shortenString = function(message) {
+    if (typeof message !== 'string') {
+        alert('Please use no simbols');
+    } else {
+        alert(message.trim());
+        if (message.length > 30) {
+            alert(message.replace(`${message.substring(30)}`, '...'));
+        }
+    }
+};
+
+shortenString('  how can I understand without Counting how many symbols I typed and where is the 30th symbol and if my string is still trimmed');
