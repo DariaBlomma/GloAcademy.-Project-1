@@ -90,7 +90,7 @@ let namePerson = 'Daria';
 namePerson === 'Артем' ? console.log('директор') :
     namePerson === 'Максим' ? console.log('преподаватель') :
     console.log('студент');
-*/
+
 
 const shortenString = function(message) {
     if (typeof message !== 'string') {
@@ -103,4 +103,29 @@ const shortenString = function(message) {
     }
 };
 
-shortenString('  how can I understand without Counting how many symbols I typed and where is the 30th symbol and if my string is still trimmed');
+shortenString(`  how can I understand without Counting how many symbols I typed 
+and where is the 30th symbol and if my string is still trimmed`);
+*/
+let arr = [];
+arr.push('123', '2678', '6900', '4589', '28945', '4123975', '2134568890');
+
+let result = arr.map(item => {
+    if(item[0] === '2' || item[0] === '4') {
+        console.log(item);
+    }
+});
+
+
+primeNumber: for (let i = 2; i < 100; i++) {
+    for (let j = 2; j < i; j++) {
+        if (i % j === 0) {
+            continue primeNumber;
+        }   
+    }
+    console.log(`${i}. Делители этого числа: 1 и ${i}`);
+}
+
+
+
+
+
