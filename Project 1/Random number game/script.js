@@ -1,4 +1,4 @@
-//game random number
+// //game random number
 'use strict';
 
 let isNumber = function(n) {
@@ -9,49 +9,49 @@ function showTypeOf(data) {
     console.log(typeof data);
 }
 
-
-
-
 const startGame= function() {
     let randomNumber = Math.round(Math.random() * 100);
-    console.log('randomNumber: ', randomNumber);
+    //console.log('randomNumber: ', randomNumber);
+    let tryCount = 10;
+
+    function startAgain() {
+        let ifAgain = confirm('Хотели бы сыграть еще?');
+            if (ifAgain) {
+                startGame();
+            } else {
+                return alert('Игра окончена');
+            }
+    }
 
     function writeNumber() {
         let userAnswer = prompt('Угадай число от 1 до 100');
-        console.log('userAnswer: ', userAnswer);
-        showTypeOf(userAnswer);
+        --tryCount;
 
         function compareAnswer () {
+
+            if(tryCount === 0) {
+                alert('Попытки закончились');
+                return startAgain();
+            }
             if (userAnswer > randomNumber) {
-                console.log('userAnswer: ', userAnswer);
-                showTypeOf(userAnswer);
-                alert('Загаданное число меньше');
+                alert('Загаданное число меньше. Oсталось попыток ' + tryCount);
                 writeNumber();
             } else if(userAnswer < randomNumber) {
-                console.log('userAnswer: ', userAnswer);
-                showTypeOf(userAnswer);
-                alert('Загаданное число больше');
+                alert('Загаданное число больше. Oсталось попыток ' + tryCount);
                 writeNumber();
             } else if (userAnswer === randomNumber) {
-                console.log('userAnswer: ', userAnswer);
-                showTypeOf(userAnswer);
-                return alert('Поздравляю, Вы угадали!!!');
+                alert ('Поздравляю, Вы угадали!!!');
+                return startAgain();
             }
         }
 
         if (userAnswer === null) {
-            console.log('userAnswer: ', userAnswer);
-            showTypeOf(userAnswer);
             return alert('Игра окончена');
         } else if (!isNumber(userAnswer)) {
-            console.log('userAnswer: ', userAnswer);
-            showTypeOf(userAnswer);
             alert('Введи число!');
             writeNumber();
         } else {
             userAnswer = Number(userAnswer);
-            console.log('userAnswer: ', userAnswer);
-            showTypeOf(userAnswer);
             compareAnswer();
         }
     }
