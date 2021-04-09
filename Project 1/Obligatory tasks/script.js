@@ -10,14 +10,15 @@ function showTypeOf(data) {
 }
 
 let money,
-    mission = 12000, 
+    start = function() {//repeat asking while not a number
+        do {
+            money = prompt('Ваш месячный доход?');//month
+        } while (!isNumber(money));
+    };
+    start();
+
+let mission = 12000, 
     period = 12;
-
-//repeat asking while not a number
-do {
-    money = prompt('Ваш месячный доход?');//month
-} while (!isNumber(money));
-
 
 showTypeOf(money);
 
