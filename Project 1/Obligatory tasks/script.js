@@ -1,5 +1,6 @@
 'use strict';
 //obligatory task
+/*
 //check input data
 let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -139,3 +140,54 @@ for (let key in appData) {
 appData.getInfoDeposit();
 
 console.log('appData.addExpenses: ', appData.addExpenses.join(', '));
+*/
+
+//lesson 09
+const startBtn = document.getElementById('start');
+console.log('startBtn: ', startBtn);
+const incomeAdd = document.getElementsByTagName('button')[0];
+console.log('incomeAdd: ', incomeAdd);
+const expensesAdd = document.getElementsByTagName('button')[1];
+console.log('expensesAdd: ', expensesAdd);
+const depositCheck = document.querySelector('#deposit-check');
+console.log('depositCheck: ', depositCheck);
+const addExpensesItem1 = document.querySelectorAll('.additional_income-item')[0];
+console.log('addExpensesItem1: ', addExpensesItem1);
+const addExpensesItem2 = document.querySelectorAll('.additional_income-item')[1];
+console.log('addExpensesItem2 : ', addExpensesItem2 );
+const budgetMonthValue = document.getElementsByClassName('budget_month-value');
+console.log('budgetMonthValue: ', budgetMonthValue);
+const budgetDayValue = document.getElementsByClassName('budget_day-value');
+console.log('budgetDayValue: ', budgetDayValue);
+const expensesMonthValue = document.getElementsByClassName('expenses_month-value');
+console.log('expensesMonthValue: ', expensesMonthValue);
+const additionalIncomeValue = document.getElementsByClassName('additional_income-value');
+console.log('additionalIncomeValue : ', additionalIncomeValue );
+const additionalExpensesValue = document.getElementsByClassName('additional_expenses-value');
+console.log('additionalExpensesValue : ', additionalExpensesValue );
+const incomePeriodValue = document.getElementsByClassName('income_period-value');
+console.log('incomePeriodValue: ', incomePeriodValue);
+const targetMonthdValue = document.getElementsByClassName('target_month-value');
+console.log('targetMonthdValue: ', targetMonthdValue);
+const salaryAmount = document.querySelector('.salary-amount');
+console.log('salaryAmount: ', salaryAmount);
+const addIncomeTitle = document.querySelector('.income-items .income-title');
+console.log('addIncomeTitle : ', addIncomeTitle );
+const addIncomeAmount = document.querySelector('.income-amount');
+console.log('addIncomeAmount: ', addIncomeAmount);
+const possibleIncomeTitle = document.querySelector('.additional_income-item');
+console.log('possibleIncomeTitle: ', possibleIncomeTitle);
+const possibleIncomeTitle2 = document.querySelectorAll('.additional_income-item')[1];
+console.log('possibleIncomeTitle2: ', possibleIncomeTitle2);
+const expensesTitle = document.querySelector('.expenses-items .expenses-title');
+console.log('expensesTitle : ', expensesTitle );
+const expensesAmount = document.querySelector('.expenses-amount');
+console.log('expensesAmount: ', expensesAmount);
+const additionalExpensesItem = document.querySelector('.additional_expenses-item');
+console.log('additionalExpensesItem: ', additionalExpensesItem);
+const mission = document.querySelector('.target-amount');
+console.log('mission: ', mission);
+const periodSelect = document.querySelector('.period-select');
+console.log('periodSelect: ', periodSelect);
+
+
