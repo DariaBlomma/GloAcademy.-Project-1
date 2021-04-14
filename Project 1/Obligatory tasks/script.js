@@ -43,8 +43,33 @@ let startBtn = document.getElementById('start'),
     targetAmount = document.querySelector('.target-amount'),
 
     periodSelect = document.querySelector('.period-select'),
-    periodAmount = document.querySelector('.period-amount');
+    periodAmount = document.querySelector('.period-amount'),
+    namePlaceholders = document.querySelectorAll('[placeholder="Наименование"]'),
+    sumPlaceholders = document.querySelectorAll('[placeholder="Сумма"]');
+    
 
+namePlaceholders.forEach(function(item) {
+    item.setAttribute('pattern', '^[А-Яа-яЁё\W\s]+$');
+    item.addEventListener('change', function(e) {
+        if (item.checkValidity() === false) {
+                if (item.validity.patternMismatch) {
+                    alert(' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
+                }
+            } 
+    });
+});
+console.log('namePlaceholder: ', namePlaceholders);
+sumPlaceholders.forEach(function(item) {
+    item.setAttribute('pattern', '^\d+$');
+    item.addEventListener('change', function(e) {
+        if (item.checkValidity() === false) {
+                if (item.validity.patternMismatch) {
+                    alert(' Это недопустимый формат ввода. Используйте только цифры');
+                }
+            } 
+    });
+});
+console.log('sumPlaceholder: ', sumPlaceholders);
 //check input data
 let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -124,9 +149,12 @@ let appData = {
             }
         });
     },
-    addExpensesBlock: function() {
+    addExpensesBlock: function(e) {
         // создаем обязтельне расходы
         let cloneExpensesItem = expensesItems[0].cloneNode(true);
+        cloneExpensesItem.children[0].value = '';
+        cloneExpensesItem.children[1].value = '';
+        
         expensesPlus.before(cloneExpensesItem);
         expensesItems = document.querySelectorAll('.expenses-items');
         if(expensesItems.length === 3) {
@@ -136,6 +164,8 @@ let appData = {
     addIncomeBlock: function() {
          // создаем дополнительные доходы
         let cloneIncomeItem = incomeItems[0].cloneNode(true);
+        cloneIncomeItem.children[0].value = '';
+        cloneIncomeItem.children[1].value = '';
         incomePlus.before(cloneIncomeItem);
         incomeItems = document.querySelectorAll('.income-items');
         if(incomeItems.length === 3) {
@@ -196,7 +226,7 @@ let appData = {
         return appData.budgetMonth * periodSelect.value;
     }
 };
-salaryAmount.addEventListener('change', function() {
+salaryAmount.addEventListener('change', function(e) {
     if(salaryAmount.value === '') {
         startBtn.style.display = 'none';
         //alert(' Ошибка, поле "Месячный доход" должно быть заполнено');
@@ -207,11 +237,16 @@ salaryAmount.addEventListener('change', function() {
     }
 });
 
+
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('change', function(e) {
     periodAmount.textContent = e.target.value;
 });
+
+
+
+
 
 //Delete these logs?
 //console.log(addExpenses.length);
