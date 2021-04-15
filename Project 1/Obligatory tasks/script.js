@@ -2,6 +2,7 @@
 //obligatory task
 //lesson 09
 let startBtn = document.getElementById('start'),
+    cancel = document.getElementById('cancel'),
 
     incomePlus = document.getElementsByTagName('button')[0],
 
@@ -44,6 +45,7 @@ let startBtn = document.getElementById('start'),
 
     periodSelect = document.querySelector('.period-select'),
     periodAmount = document.querySelector('.period-amount');
+    
 
 //check input data
 let isNumber = function(n) {
@@ -62,26 +64,50 @@ let appData = {
     percentDeposit: 0,
     moneyDeposit: 0,
     start: function() {//repeat asking while not a number
-        appData.budget = salaryAmount.value;
-        appData.getExpenses();
-        appData.getIncome();
-        appData.getExpensesMonth();// суммируем расхо
-        appData.getAddExpenses();
-        appData.getAddIncome();
-        appData.getBudget(); // считаем budgetMonth, budgetDay
-        appData.showResult();
+        this.budget = salaryAmount.value;
+        this.getExpenses();
+        this.getIncome();
+        this.getExpensesMonth();// суммируем расхо
+        this.getAddExpenses();
+        this.getAddIncome();
+        this.getBudget(); // считаем budgetMonth, budgetDay
+        this.showResult();
+    },
+    reset: function(e){
+        let textInputs = document.querySelectorAll('[type="text"]');
+        textInputs.forEach(function(item) {
+            item.value = '';
+            item.removeAttribute('disabled', 'true');
+        });
+        this.budget = 0;
+        this.income = {};
+        this.addIncome = [];
+        this.incomeMonth = 0;
+        this.expenses = {};
+        this.addExpenses = [];
+        this.deposit = false;
+        this.percentDeposit = 0;
+        this.moneyDeposit = 0;
+        this.budget = 0;
+        this.budgetDay = 0;
+        this.budgetMonth = 0;
+        this.expensesMonth = 0;
     },
     showResult: function() {
-        budgetMonthValue.value = appData.budgetMonth;
-        budgetDayValue.value = appData.budgetDay;
-        expensesMonthValue.value = appData.expensesMonth;
-        additionalExpensesValue.value = appData.addExpenses.join(', ');
-        additionalIncomeValue.value = appData.addIncome.join(', ');
-        targetMonthdValue.value = appData.getTargetMonth();
-        incomePeriodValue.value = appData.calcSavedMoney();
+        
+        budgetMonthValue.value = this.budgetMonth;
+        budgetDayValue.value = this.budgetDay;
+        expensesMonthValue.value = this.expensesMonth;
+        additionalExpensesValue.value = this.addExpenses.join(', ');
+        additionalIncomeValue.value = this.addIncome.join(', ');
+        targetMonthdValue.value = this.getTargetMonth();
+        incomePeriodValue.value = this.calcSavedMoney();
 
         periodSelect.addEventListener('change', function() {
-            incomePeriodValue.value = appData.calcSavedMoney();
+            //? this is input, not appData. Change?
+            let calcPeriod = appData.calcSavedMoney.bind(appData);
+            //console.log('this:', this);
+            incomePeriodValue.value = calcPeriod();
         });
             
     },
@@ -162,49 +188,75 @@ let appData = {
         return appData.expensesMonth;
     }, 
     getBudget: function() {
+        
         //Бюджет на месяц вычисляется по формуле: доходы минус сумма расходов, т е предыдущая функциия
-        appData.budgetMonth = +appData.budget + appData.incomeMonth - appData.expensesMonth;
-        appData.budgetDay = Math.floor(appData.budgetMonth / 30);
+        this.budgetMonth = +this.budget + this.incomeMonth - this.expensesMonth;
+        this.budgetDay = Math.floor(this.budgetMonth / 30);
     }, 
     getTargetMonth: function() {
-        return Math.ceil(targetAmount.value/ appData.budgetMonth); //округляем в большую сторону
+        return Math.ceil(targetAmount.value/ this.budgetMonth); //округляем в большую сторону
     },
     getStatusIncome: function() {
-        if(appData.budgetDay > 1200) {
-            alert('У вас высокий уровень дохода ' + appData.budgetDay);
-        } else if (appData.budgetDay >= 600 && appData.budgetDay <= 1200) {
-            alert('У вас средний уровень дохода ' + appData.budgetDay);
-        } else if (appData.budgetDay < 600 && appData.budgetDay >= 0) {
-            alert('К сожалению у вас уровень дохода ниже среднего ' + appData.budgetDay);
+        if(this.budgetDay > 1200) {
+            alert('У вас высокий уровень дохода ' + this.budgetDay);
+        } else if (this.budgetDay >= 600 && appData.budgetDay <= 1200) {
+            alert('У вас средний уровень дохода ' + this.budgetDay);
+        } else if (this.budgetDay < 600 && this.budgetDay >= 0) {
+            alert('К сожалению у вас уровень дохода ниже среднего ' + this.budgetDay);
         } else {
             alert('Что то пошло не так');
-            return 'negative number' + appData.budgetDay;
+            return 'negative number' + this.budgetDay;
         }
     },
     getInfoDeposit: function() {
-        if(appData.deposit) {
+        if(this.deposit) {
             do {
-                appData.percentDeposit = prompt(' Какой годовой процент?', '10');
+                this.percentDeposit = prompt(' Какой годовой процент?', '10');
             } while (!isNumber(appData.percentDeposit));
             do {
-                appData.moneyDeposit = prompt(' Какая сумма заложена?', '10000');
-            } while (!isNumber(appData.moneyDeposit));
+                this.moneyDeposit = prompt(' Какая сумма заложена?', '10000');
+            } while (!isNumber(this.moneyDeposit));
 
         }
     },
     calcSavedMoney: function() {
-        return appData.budgetMonth * periodSelect.value;
+        return this.budgetMonth * periodSelect.value;
     }
 };
+
+
+let salaryCheck;
 salaryAmount.addEventListener('change', function() {
     if(salaryAmount.value === '') {
-        startBtn.style.display = 'none';
-        //alert(' Ошибка, поле "Месячный доход" должно быть заполнено');
-        //return;
+        startBtn.setAttribute('disabled', 'true');
+            startBtn.style.opacity = '0.5';
+            alert(' Ошибка, поле "Месячный доход" должно быть заполнено');
     } else {
-        startBtn.style.display = 'block';
-        startBtn.addEventListener('click', appData.start);
+        startBtn.removeAttribute('disabled', 'true');
+        startBtn.style.opacity = '1';
+        salaryCheck = true;
+        return salaryCheck;
     }
+});
+
+startBtn.addEventListener('click', function(e) {
+    if (salaryCheck) {
+        let start = appData.start.bind(appData);
+            start();
+            let textInputs = document.querySelectorAll('[type="text"]');
+            textInputs.forEach(function(item) {
+                item.setAttribute('disabled', 'true');
+            });
+            startBtn.style.display = 'none';
+            cancel.style.display = 'block';
+    }
+});
+
+cancel.addEventListener('click', function() {
+    let reset = appData.reset.bind(appData);
+    reset(); 
+    cancel.style.display = 'none';
+    startBtn.style.display = 'block';
 });
 
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
