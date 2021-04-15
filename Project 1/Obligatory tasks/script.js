@@ -51,8 +51,21 @@ let startBtn = document.getElementById('start'),
 let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
-
-
+//maybe use for reset somehow? think about it
+// let initialState = {
+//     income: {},
+//     addIncome: [],
+//     incomeMonth: 0,
+//     expenses: {},
+//     addExpenses: [],
+//     deposit: false,
+//     percentDeposit: 0,
+//     moneyDeposit: 0,
+//     budget: 0,
+//     budgetDay: 0,
+//     budgetMonth: 0,
+//     expensesMonth: 0,
+// };
 // правильная сумма для проверки - при сумме расходов 300, бюджет на день 156
 let appData = {
     income: {},
