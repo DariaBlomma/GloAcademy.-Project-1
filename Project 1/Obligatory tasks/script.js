@@ -47,28 +47,29 @@ let startBtn = document.getElementById('start'),
     namePlaceholders = document.querySelectorAll('[placeholder="Наименование"]'),
     sumPlaceholders = document.querySelectorAll('[placeholder="Сумма"]');
     
-
-namePlaceholders.forEach(function(item) {
-    item.setAttribute('pattern', '^[А-Яа-яЁё\W\s]+$');
-    item.addEventListener('change', function(e) {
-        if (item.checkValidity() === false) {
-                if (item.validity.patternMismatch) {
-                    alert(' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
-                }
-            } 
-    });
-});
-console.log('namePlaceholder: ', namePlaceholders);
-sumPlaceholders.forEach(function(item) {
-    item.setAttribute('pattern', '^\d+$');
-    item.addEventListener('change', function(e) {
-        if (item.checkValidity() === false) {
-                if (item.validity.patternMismatch) {
-                    alert(' Это недопустимый формат ввода. Используйте только цифры');
-                }
-            } 
-    });
-});
+let reNames = /[А-Яа-яЁё\W\s]/g;
+let reNumbers = /\d/g;
+// namePlaceholders.forEach(function(item) {
+//     item.setAttribute('pattern', '^[А-Яа-яЁё\W\s]+$');
+//     item.addEventListener('change', function(e) {
+//         if (item.checkValidity() === false) {
+//                 if (item.validity.patternMismatch) {
+//                     alert(' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
+//                 }
+//             } 
+//     });
+// });
+// console.log('namePlaceholder: ', namePlaceholders);
+// sumPlaceholders.forEach(function(item) {
+//     item.setAttribute('pattern', '^\d+$');
+//     item.addEventListener('change', function(e) {
+//         if (item.checkValidity() === false) {
+//                 if (item.validity.patternMismatch) {
+//                     alert(' Это недопустимый формат ввода. Используйте только цифры');
+//                 }
+//             } 
+//     });
+// });
 console.log('sumPlaceholder: ', sumPlaceholders);
 //check input data
 let isNumber = function(n) {
@@ -226,16 +227,37 @@ let appData = {
         return appData.budgetMonth * periodSelect.value;
     }
 };
+
+
+
 salaryAmount.addEventListener('change', function(e) {
     if(salaryAmount.value === '') {
         startBtn.style.display = 'none';
-        //alert(' Ошибка, поле "Месячный доход" должно быть заполнено');
+        alert(' Ошибка, поле "Месячный доход" должно быть заполнено');
         //return;
     } else {
         startBtn.style.display = 'block';
-        startBtn.addEventListener('click', appData.start);
+        startBtn.addEventListener('click', function(e) {
+            let ok = 0;
+            for (let i = 0; i < namePlaceholders.length; i++) {
+                let namesCheck = reNames.test(namePlaceholders[i].value);
+                console.log('namesCheck: ', i, namesCheck, namePlaceholders[i].value);
+                console.log(namePlaceholders[i]);
+                if(namesCheck) {
+                    ++ok;
+                    if (ok === namePlaceholders.length) {
+                        appData.start();
+                    }
+                } else {
+                    console.log(namePlaceholders[i]);
+                    alert(namePlaceholders[i].value + ' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
+                }
+            }
+        //startBtn.addEventListener('click', appData.start);
+        });
     }
 });
+
 
 
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
