@@ -77,8 +77,6 @@ let appData = {
     percentDeposit: 0,
     moneyDeposit: 0,
     start: function() {//repeat asking while not a number
-        // let _self = this;
-        // console.log('_self: ', _self);
 
         this.budget = salaryAmount.value;
         this.getExpenses();
@@ -100,14 +98,6 @@ let appData = {
             expensesItems[2].remove();
             expensesPlus.style.display = 'block';
         }
-        
-
-        // let cloneExpensesItem = expensesItems[0].cloneNode(true);
-        // expensesPlus.before(cloneExpensesItem);
-        // expensesItems = document.querySelectorAll('.expenses-items');
-        // if(expensesItems.length === 3) {
-        //     expensesPlus.style.display = 'none';
-        // }
 
         let textInputs = document.querySelectorAll('[type="text"]');
         textInputs.forEach(function(item) {
@@ -130,7 +120,7 @@ let appData = {
         this.expensesMonth = 0;
     },
     showResult: function() {
-        
+        const _this = this;
         budgetMonthValue.value = this.budgetMonth;
         budgetDayValue.value = this.budgetDay;
         expensesMonthValue.value = this.expensesMonth;
@@ -140,10 +130,7 @@ let appData = {
         incomePeriodValue.value = this.calcSavedMoney();
 
         periodSelect.addEventListener('change', function() {
-            //? this is input, not appData. Change?
-            let calcPeriod = appData.calcSavedMoney.bind(appData);
-            //console.log('this:', this);
-            incomePeriodValue.value = calcPeriod();
+            incomePeriodValue.value = _this.calcSavedMoney();
         });
             
     },
@@ -165,8 +152,8 @@ let appData = {
             }
         });
 
-        for (let key in appData.income) {
-            this.incomeMonth += +appData.income[key];
+        for (let key in this.income) {
+            this.incomeMonth += +this.income[key];
         }
     },
     getAddExpenses: function() {
@@ -218,8 +205,8 @@ let appData = {
     expensesMonth: 0,
     getExpensesMonth: function() {
         // просуммировали расходы
-        for (let key in appData.expenses) {
-            this.expensesMonth += appData.expenses[key];
+        for (let key in this.expenses) {
+            this.expensesMonth += this.expenses[key];
         }
         return this.expensesMonth;
     }, 
@@ -235,7 +222,7 @@ let appData = {
     getStatusIncome: function() {
         if(this.budgetDay > 1200) {
             alert('У вас высокий уровень дохода ' + this.budgetDay);
-        } else if (this.budgetDay >= 600 && appData.budgetDay <= 1200) {
+        } else if (this.budgetDay >= 600 && this.budgetDay <= 1200) {
             alert('У вас средний уровень дохода ' + this.budgetDay);
         } else if (this.budgetDay < 600 && this.budgetDay >= 0) {
             alert('К сожалению у вас уровень дохода ниже среднего ' + this.budgetDay);
@@ -308,8 +295,8 @@ cancel.addEventListener('click', function() {
     } 
 });
 
-expensesPlus.addEventListener('click', appData.addExpensesBlock);
-incomePlus.addEventListener('click', appData.addIncomeBlock);
+expensesPlus.addEventListener('click', appData.addExpensesBlock.bind(appData));
+incomePlus.addEventListener('click', appData.addIncomeBlock.bind(appData));
 periodSelect.addEventListener('change', function(e) {
     periodAmount.textContent = e.target.value;
 });
