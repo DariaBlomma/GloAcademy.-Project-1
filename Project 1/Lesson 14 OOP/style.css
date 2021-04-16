@@ -1,0 +1,15 @@
+.down {
+    top: 10px;
+}
+
+.up {
+    top: -10px;
+}
+
+.left {
+    left: -10px;
+}
+
+.right {
+    left: 10px;
+}

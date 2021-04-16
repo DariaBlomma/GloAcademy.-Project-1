@@ -1,11 +1,12 @@
 'use strict';
 //obligatory task. Part 1
-function DomElement (selector, height, width, bg, fontSize) {
+function DomElement (selector, height, width, bg, fontSize, position) {
     this.selector = selector;
     this.height = height;
     this.width = width;
     this.bg = bg;
     this.fontSize = fontSize;
+    this.position = position;
 }
 
 DomElement.prototype.createElem = function () {
@@ -17,6 +18,7 @@ DomElement.prototype.createElem = function () {
         width: ${this.width}px;
         background-color: #${this.bg};
         font-size: ${this.fontSize}px;
+        position: ${this.position};
         `;
         document.body.append(div);
     }
@@ -28,14 +30,68 @@ DomElement.prototype.createElem = function () {
         width: ${this.width}px;
         background-color: #${this.bg};
         font-size: ${this.fontSize}px;
+        position: ${this.position};
         `;
         document.body.append(p);
     }
 };
 
-let domElement = new DomElement('#blue', 80, 800, 'ffc0cb', 50);
-let domElement2 = new DomElement('.red', 400, 200, 'add8e6', 25);
-console.log('domElement: ', domElement);
-domElement.createElem();
-domElement2.createElem();
+DomElement.prototype.move = function(direction) {
+    let elem = document.querySelector(`${this.selector}`);
+    console.log('elem: ', elem);
 
+    // если каждый раз увеличивать координаты
+    let domRect = elem.getBoundingClientRect();
+    let currTop = domRect.top;
+    let currLeft = domRect.left;
+    
+    if (direction === 'up') {
+        console.log('currTop: ', currTop);
+        elem.style.top = currTop - 10 +'px';
+    } else if (direction === 'down') {
+        elem.style.top = currTop + 10 +'px';
+    } else if (direction === 'left') {
+        elem.style.left = currLeft - 10 +'px';
+    } else if (direction === 'right') {
+        elem.style.left = currLeft + 10 +'px';
+    }
+    
+    // координаты меняются относительно исходного положения
+    // elem.className = direction;
+    
+
+    // координаты меняются относительно нового положения, но только 3 раза.
+    // elem.classList.add(direction);
+    
+};
+
+
+
+let domElement = new DomElement('#blue', 100, 100, 'ffc0cb', 20, 'absolute');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('domElement: ', domElement);
+    domElement.createElem();
+});
+
+
+document.addEventListener('keydown', function(event) {
+    
+    if (event.code === 'ArrowDown') {
+        console.log('ArrowDown');
+        domElement.move('down');
+        //top: 10px;
+    } else if (event.code === 'ArrowUp') {
+        console.log('ArrowUp');
+        domElement.move('up');
+        //top: -10px;
+    } else if (event.code === 'ArrowLeft') {
+        console.log('ArrowLeft');
+        domElement.move('left');
+        //left: -10px;
+    } else if (event.code === 'ArrowRight') {
+        console.log('ArrowRight');
+        domElement.move('right');
+        //left: 10px;
+    }
+        
+});
