@@ -49,27 +49,15 @@ let startBtn = document.getElementById('start'),
     
 let reNames = /[А-Яа-яЁё\W\s]/g;
 let reNumbers = /\d/g;
-// namePlaceholders.forEach(function(item) {
-//     item.setAttribute('pattern', '^[А-Яа-яЁё\W\s]+$');
-//     item.addEventListener('change', function(e) {
-//         if (item.checkValidity() === false) {
-//                 if (item.validity.patternMismatch) {
-//                     alert(' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
-//                 }
-//             } 
-//     });
-// });
-// console.log('namePlaceholder: ', namePlaceholders);
-// sumPlaceholders.forEach(function(item) {
-//     item.setAttribute('pattern', '^\d+$');
-//     item.addEventListener('change', function(e) {
-//         if (item.checkValidity() === false) {
-//                 if (item.validity.patternMismatch) {
-//                     alert(' Это недопустимый формат ввода. Используйте только цифры');
-//                 }
-//             } 
-//     });
-// });
+// решение от Александра Монахова
+const isNumberInput = function(event) {
+    event.target.value = event.target.value.replace(/\D/g, '');
+};
+
+const isText = function(event) {
+    event.target.value = event.target.value.replace(/[^а-яА-Я ,]/g, '');
+};
+
 console.log('sumPlaceholder: ', sumPlaceholders);
 //check input data
 let isNumber = function(n) {
@@ -87,6 +75,20 @@ let appData = {
     deposit: false,
     percentDeposit: 0,
     moneyDeposit: 0,
+    validation: function () {
+        let sumPlaceholders = document.querySelectorAll('[placeholder="Сумма"]'),
+            textPlaceholders = document.querySelectorAll('[placeholder="Наименование"]'),
+            namePlaceholder = document.querySelectorAll('[placeholder="название"]');
+        sumPlaceholders.forEach((item) => {
+            item.addEventListener('input', isNumberInput);
+        });
+        textPlaceholders.forEach((item) => {
+            item.addEventListener('input', isText);
+        });
+        namePlaceholder.forEach((item) => {
+            item.addEventListener('input', isText);
+        });
+    },
     start: function() {//repeat asking while not a number
         appData.budget = salaryAmount.value;
         appData.getExpenses();
@@ -228,7 +230,7 @@ let appData = {
     }
 };
 
-
+appData.validation();
 
 salaryAmount.addEventListener('change', function(e) {
     if(salaryAmount.value === '') {
@@ -237,24 +239,26 @@ salaryAmount.addEventListener('change', function(e) {
         //return;
     } else {
         startBtn.style.display = 'block';
-        startBtn.addEventListener('click', function(e) {
-            let ok = 0;
-            for (let i = 0; i < namePlaceholders.length; i++) {
-                let namesCheck = reNames.test(namePlaceholders[i].value);
-                console.log('namesCheck: ', i, namesCheck, namePlaceholders[i].value);
-                console.log(namePlaceholders[i]);
-                if(namesCheck) {
-                    ++ok;
-                    if (ok === namePlaceholders.length) {
-                        appData.start();
-                    }
-                } else {
-                    console.log(namePlaceholders[i]);
-                    alert(namePlaceholders[i].value + ' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
-                }
-            }
-        //startBtn.addEventListener('click', appData.start);
-        });
+        startBtn.addEventListener('click', appData.start);
+        // работает с ошибкой, каждый раз обязательно наход неверное поле, хотя первый раз оно было верно
+        // startBtn.addEventListener('click', function(e) {
+        //     let ok = 0;
+        //     for (let i = 0; i < namePlaceholders.length; i++) {
+        //         let namesCheck = reNames.test(namePlaceholders[i].value);
+        //         console.log('namesCheck: ', i, namesCheck, namePlaceholders[i].value);
+        //         console.log(namePlaceholders[i]);
+        //         if(namesCheck) {
+        //             ++ok;
+        //             if (ok === namePlaceholders.length) {
+        //                 appData.start();
+        //             }
+        //         } else {
+        //             console.log(namePlaceholders[i]);
+        //             alert(namePlaceholders[i].value + ' Это недопустимый формат ввода. Используйте только русские буквы, пробелы или знаки препинания.');
+        //         }
+        //     }
+        
+        // });
     }
 });
 
