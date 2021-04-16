@@ -45,7 +45,7 @@ let startBtn = document.getElementById('start'),
 
     periodSelect = document.querySelector('.period-select'),
     periodAmount = document.querySelector('.period-amount');
-    
+    // let cloneExpensesItem = expensesItems[0].cloneNode(true);
 
 //check input data
 let isNumber = function(n) {
@@ -90,13 +90,24 @@ let appData = {
         this.showResult();
     },
     reset: function(e){
-        incomeItems[1].remove();
-        incomeItems[2].remove();
-        incomeItems = incomeItems[0];
+        if (incomeItems.length > 1) {
+            incomeItems[1].remove();
+            incomeItems[2].remove();
+            incomePlus.style.display = 'block';
+        }
+        if(expensesItems.length > 1) {
+            expensesItems[1].remove();
+            expensesItems[2].remove();
+            expensesPlus.style.display = 'block';
+        }
+        
 
-        expensesItems[1].remove();
-        expensesItems[2].remove();
-        expensesItems = expensesItems[0];
+        // let cloneExpensesItem = expensesItems[0].cloneNode(true);
+        // expensesPlus.before(cloneExpensesItem);
+        // expensesItems = document.querySelectorAll('.expenses-items');
+        // if(expensesItems.length === 3) {
+        //     expensesPlus.style.display = 'none';
+        // }
 
         let textInputs = document.querySelectorAll('[type="text"]');
         textInputs.forEach(function(item) {
@@ -249,10 +260,14 @@ let appData = {
     }
 };
 
-if(salaryAmount.value === '') {
+let  mustFieldCheck =  function () {
+    if(salaryAmount.value === '') {
     startBtn.setAttribute('disabled', 'true');
-        startBtn.style.opacity = '0.5';
-} 
+    startBtn.style.opacity = '0.5';
+    } 
+};
+
+mustFieldCheck();
 
 let salaryCheck;
 salaryAmount.addEventListener('change', function() {
@@ -282,10 +297,15 @@ startBtn.addEventListener('click', function(e) {
 });
 
 cancel.addEventListener('click', function() {
+    mustFieldCheck(); 
     let reset = appData.reset.bind(appData);
     reset(); 
     cancel.style.display = 'none';
     startBtn.style.display = 'block';
+    if(salaryAmount.value === '') {
+        startBtn.setAttribute('disabled', 'true');
+        startBtn.style.opacity = '0.5';
+    } 
 });
 
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
