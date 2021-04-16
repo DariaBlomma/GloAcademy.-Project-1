@@ -216,6 +216,8 @@ AppData.prototype.getAddIncome = function() {
 AppData.prototype.addExpensesBlock = function() {
     // создаем обязтельне расходы
     let cloneExpensesItem = expensesItems[0].cloneNode(true);
+    cloneExpensesItem.children[0].value = '';
+    cloneExpensesItem.children[1].value = '';
     expensesPlus.before(cloneExpensesItem);
     expensesItems = document.querySelectorAll('.expenses-items');
     if(expensesItems.length === 3) {
@@ -226,6 +228,8 @@ AppData.prototype.addExpensesBlock = function() {
 AppData.prototype.addIncomeBlock = function() {
      // создаем дополнительные доходы
     let cloneIncomeItem = incomeItems[0].cloneNode(true);
+    cloneIncomeItem.children[0].value = '';
+    cloneIncomeItem.children[1].value = '';
     incomePlus.before(cloneIncomeItem);
     incomeItems = document.querySelectorAll('.income-items');
     if(incomeItems.length === 3) {
