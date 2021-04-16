@@ -108,6 +108,9 @@ AppData.prototype.start = function() {
 };
 
 AppData.prototype.reset = function(e){
+    const _this = this;
+    incomeItems = document.querySelectorAll('.income-items');
+    expensesItems = document.querySelectorAll('.expenses-items');
     if (incomeItems.length > 1) {
         incomeItems[1].remove();
         incomeItems[2].remove();
@@ -143,6 +146,12 @@ AppData.prototype.reset = function(e){
     this.budgetDay = 0;
     this.budgetMonth = 0;
     this.expensesMonth = 0;
+    periodSelect.value = 1;
+    periodAmount.textContent = 1;
+
+    periodSelect.addEventListener('change', function() {
+        incomePeriodValue.value = _this.calcSavedMoney();
+    });
 };
 
 AppData.prototype.showResult = function() {
