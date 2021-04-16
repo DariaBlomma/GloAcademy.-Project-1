@@ -29,6 +29,8 @@ const render = function() {
         const btnToDoCompleted = li.querySelector('.todo-complete');
         btnToDoCompleted.addEventListener('click', function() {
             item.completed = !item.completed;
+            let json = JSON.stringify(item);
+            localStorage.setItem(`${item.value}`, json);
             render();
         });
 
@@ -67,14 +69,11 @@ todoControl.addEventListener('submit', function(e) {
 
 let keys = Object.keys(localStorage);
     for(let key of keys) {
-        if(localStorage.length !== 0) {
             let parsed = JSON.parse(`${localStorage.getItem(key)}`);
-            toDoData.push(parsed);
-        }
-        
+            toDoData.push(parsed || []);
     }
 
 render();
-
+    
 
 
