@@ -41,28 +41,36 @@ DomElement.prototype.move = function(direction) {
     console.log('elem: ', elem);
 
     // если каждый раз увеличивать координаты
-    let domRect = elem.getBoundingClientRect();
-    let currTop = domRect.top;
-    let currLeft = domRect.left;
+    // let domRect = elem.getBoundingClientRect();
+    // let currTop = domRect.top;
+    // let currLeft = domRect.left;
     
-    if (direction === 'up') {
-        console.log('currTop: ', currTop);
-        elem.style.top = currTop - 10 +'px';
-    } else if (direction === 'down') {
-        elem.style.top = currTop + 10 +'px';
-    } else if (direction === 'left') {
-        elem.style.left = currLeft - 10 +'px';
-    } else if (direction === 'right') {
-        elem.style.left = currLeft + 10 +'px';
-    }
+    // if (direction === 'up') {
+    //     console.log('currTop: ', currTop);
+    //     elem.style.top = currTop - 10 +'px';
+    // } else if (direction === 'down') {
+    //     elem.style.top = currTop + 10 +'px';
+    // } else if (direction === 'left') {
+    //     elem.style.left = currLeft - 10 +'px';
+    // } else if (direction === 'right') {
+    //     elem.style.left = currLeft + 10 +'px';
+    // }
     
     // координаты меняются относительно исходного положения
     // elem.className = direction;
     
 
-    // координаты меняются относительно нового положения, но только 3 раза.
-    // elem.classList.add(direction);
-    
+    // координаты меняются сколько угодно раз, но относительно нового положения только в одном направлении
+
+    elem.classList.add(direction);
+    let arr = [];
+    for (let name of elem.classList) {
+        arr.push(name);
+        if (arr.length > 1) {
+            let shifted = arr.shift();
+            elem.classList.remove(shifted);
+        }
+    }
 };
 
 
