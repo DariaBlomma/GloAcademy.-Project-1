@@ -19,6 +19,7 @@ DomElement.prototype.createElem = function () {
         background-color: #${this.bg};
         font-size: ${this.fontSize}px;
         position: ${this.position};
+        margin: 0;
         `;
         document.body.append(div);
     }
@@ -31,6 +32,7 @@ DomElement.prototype.createElem = function () {
         background-color: #${this.bg};
         font-size: ${this.fontSize}px;
         position: ${this.position};
+        margin: 0;
         `;
         document.body.append(p);
     }
@@ -41,20 +43,20 @@ DomElement.prototype.move = function(direction) {
     console.log('elem: ', elem);
 
     // если каждый раз увеличивать координаты
-    // let domRect = elem.getBoundingClientRect();
-    // let currTop = domRect.top;
-    // let currLeft = domRect.left;
-    
-    // if (direction === 'up') {
-    //     console.log('currTop: ', currTop);
-    //     elem.style.top = currTop - 10 +'px';
-    // } else if (direction === 'down') {
-    //     elem.style.top = currTop + 10 +'px';
-    // } else if (direction === 'left') {
-    //     elem.style.left = currLeft - 10 +'px';
-    // } else if (direction === 'right') {
-    //     elem.style.left = currLeft + 10 +'px';
-    // }
+    //  обнулила отступы у эдемента и body и все работает как надо
+    let domRect = elem.getBoundingClientRect();
+    let currTop = domRect.top;
+    let currLeft = domRect.left;
+
+    if (direction === 'up') {
+        elem.style.top = currTop - 10 +'px';
+    } else if (direction === 'down') {
+        elem.style.top = currTop + 10 +'px';
+    } else if (direction === 'left') {
+        elem.style.left = currLeft - 10 +'px';
+    } else if (direction === 'right') {
+        elem.style.left = currLeft + 10 +'px';
+    }
     
     // координаты меняются относительно исходного положения
     // elem.className = direction;
@@ -62,15 +64,15 @@ DomElement.prototype.move = function(direction) {
 
     // координаты меняются сколько угодно раз, но относительно нового положения только в одном направлении
 
-    elem.classList.add(direction);
-    let arr = [];
-    for (let name of elem.classList) {
-        arr.push(name);
-        if (arr.length > 1) {
-            let shifted = arr.shift();
-            elem.classList.remove(shifted);
-        }
-    }
+    // elem.classList.add(direction);
+    // let arr = [];
+    // for (let name of elem.classList) {
+    //     arr.push(name);
+    //     if (arr.length > 1) {
+    //         let shifted = arr.shift();
+    //         elem.classList.remove(shifted);
+    //     }
+    // }
 };
 
 
