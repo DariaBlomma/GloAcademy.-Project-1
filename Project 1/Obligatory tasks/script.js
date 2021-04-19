@@ -296,30 +296,30 @@ class AppData {
             incomePlus.style.display = 'none';
         }
     }
+// somewhere here is my problem
+    addExpIncBlock (parent, item, btn) { 
+         // item = our variable expensesItems or incomeItems    
+        if (parent === 'expenses') {
+            btn =  expensesPlus;
+            item = expensesItems;
+        } else {
+            btn =  incomePlus;
+        }
 
-    // addExpIncBlock (parent, item, btn) { 
-    //      // item = our variable expensesItems or incomeItems    
-    //     if (parent === 'expenses') {
-    //         btn =  expensesPlus;
-    //         item = expensesItems;
-    //     } else {
-    //         btn =  incomePlus;
-    //     }
+        let cloneItem = item[0].cloneNode(true);
+        let cloneChildren = cloneItem.children;
+        for (let i = 0; i < cloneChildren.length; i++) {
+            cloneChildren[i].value = '';
+        }
 
-    //     let cloneItem = item[0].cloneNode(true);
-    //     let cloneChildren = cloneItem.children;
-    //     for (let i = 0; i < cloneChildren.length; i++) {
-    //         cloneChildren[i].value = '';
-    //     }
-
-    //     btn.before(cloneItem);
+        btn.before(cloneItem);
         
-    //     item = document.querySelectorAll(`.${parent}-items`);
-    //     console.log('expensesItems: ', item);
-    //     if(item.length === 3) {
-    //         btn.style.display = 'none';
-    //     } 
-    // }
+        item = document.querySelectorAll(`.${parent}-items`);
+        console.log('expensesItems: ', item);
+        if(item.length === 3) {
+            btn.style.display = 'none';
+        } 
+    }
 
 
     asking () {
