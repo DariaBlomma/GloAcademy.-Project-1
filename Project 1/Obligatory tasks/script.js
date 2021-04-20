@@ -38,7 +38,10 @@ const startBtn = document.getElementById('start'),
     targetAmount = document.querySelector('.target-amount'),
 
     periodSelect = document.querySelector('.period-select'),
-    periodAmount = document.querySelector('.period-amount');
+    periodAmount = document.querySelector('.period-amount'),
+    depositBank = document.querySelector('.deposit-bank'),
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent');
 
 let incomeItems = document.querySelectorAll('.income-items'),
     expensesItems = document.querySelectorAll('.expenses-items');
@@ -51,6 +54,20 @@ const isNumberInput = (event) => {
 const isText = (event) => {
     event.target.value = event.target.value.replace(/[^а-яА-Я ,]/g, '');
 };
+
+const maxRange = (event) => {
+    
+    const range = event.target.value;
+    if (range < 0 || range > 100) {
+        startBtn.setAttribute('disabled', 'true');
+        startBtn.style.opacity = '0.5';
+    } else {
+        startBtn.removeAttribute('disabled');
+        startBtn.style.opacity = '1';
+    }
+    
+};
+
 //check input data
 const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
 
@@ -74,6 +91,11 @@ class AppData {
         const sumPlaceholders = document.querySelectorAll('[placeholder="Сумма"]'),
             textPlaceholders = document.querySelectorAll('[placeholder="Наименование"]'),
             namePlaceholder = document.querySelectorAll('[placeholder="название"]');
+        
+        depositAmount.addEventListener('input', isNumberInput);
+        depositPercent.addEventListener('input', isNumberInput);
+        depositPercent.addEventListener('input', maxRange);
+
         sumPlaceholders.forEach((item) => {
             item.addEventListener('input', isNumberInput);
         });
@@ -117,6 +139,7 @@ class AppData {
         this.getExpensesMonth();// суммируем расхо
         this.getAddExpenses();
         this.getAddIncome();
+        this.getInfoDeposit();
         this.getBudget(); // считаем budgetMonth, budgetDay
         this.showResult();
     }
@@ -282,7 +305,8 @@ class AppData {
     
     getBudget () {
     //Бюджет на месяц вычисляется по формуле: доходы минус сумма расходов, т е предыдущая функциия
-    this.budgetMonth = +this.budget + this.incomeMonth - this.expensesMonth;
+    const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+    this.budgetMonth = +this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
     this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
 
@@ -305,18 +329,42 @@ class AppData {
 
     getInfoDeposit () {
         if(this.deposit) {
-            do {
-                this.percentDeposit = prompt(' Какой годовой процент?', '10');
-            } while (!isNumber(this.percentDeposit));
-            do {
-                this.moneyDeposit = prompt(' Какая сумма заложена?', '10000');
-            } while (!isNumber(this.moneyDeposit));
-    
+            this.percentDeposit = depositPercent.value;
+            this.moneyDeposit = depositAmount.value;    
         }
     }
 
     calcSavedMoney () {
         return this.budgetMonth * periodSelect.value;
+    }
+
+    changePercent () {
+        const valueSelect = this.value;
+        if (valueSelect === 'other') {
+            depositPercent.value = '';
+            depositPercent.style.display = 'inline-block';
+            // hw Из введенный суммы высчитывать процент банка и добавлять в money
+        } else {
+            depositPercent.style.display = 'none';
+            depositPercent.value  = valueSelect;
+        }
+
+    }
+
+    depositHandler() {
+        if (depositCheck.checked) {
+            depositBank.style.display = 'inline-block';
+            depositAmount.style.display = 'inline-block';
+            this.deposit = true;
+            depositBank.addEventListener('change', this.changePercent);
+        } else {
+            depositBank.style.display = 'none';
+            depositAmount.style.display = 'none';
+            depositBank.value = '';
+            depositAmount.value = '';
+            this.deposit = false;
+            depositBank.removeEventListener('change', this.changePercent);
+        }
     }
 
     eventListeners () {
@@ -340,6 +388,7 @@ class AppData {
     
         startBtn.addEventListener('click', (e) => {
             this.start();
+            // this.start.bind(this);
             const textInputs = document.querySelectorAll('[type="text"]');
             textInputs.forEach((item) => {
                 item.setAttribute('disabled', 'true');
@@ -368,6 +417,8 @@ class AppData {
         periodSelect.addEventListener('change', (e) => {
             periodAmount.textContent = e.target.value;
         });
+
+        depositCheck.addEventListener('change', this.depositHandler.bind(this));
     }
 }
 
