@@ -119,6 +119,14 @@ class AppData {
     //         this.startBtn.removeAttribute('disabled');
     //     }
     // }
+    setCookie (key, value, year, month, day) {
+        let cookieStr = `${key}=${encodeURI(value)}`;
+        if (year) {
+            const expires = new Date(year, month - 1, day);
+            cookieStr += `; expires=${expires.toGMTString()}`;
+            document.cookie = cookieStr;
+        }
+    }
 
     start () {
         this.mustFieldCheck();
@@ -142,6 +150,24 @@ class AppData {
         this.getInfoDeposit();
         this.getBudget(); // считаем budgetMonth, budgetDay
         this.showResult();
+
+        localStorage.setItem('budgetMonth', JSON.stringify(this.budgetMonth));
+        localStorage.setItem('budgetDay', JSON.stringify(this.budgetDay));
+        localStorage.setItem('expensesMonth', JSON.stringify(this.expensesMonth));
+        localStorage.setItem('addIncome', JSON.stringify(this.addIncome));
+        localStorage.setItem('addExpenses', JSON.stringify(this.addExpenses));
+        localStorage.setItem('calcSavedMoney', JSON.stringify(incomePeriodValue.value));
+        localStorage.setItem('targetMonth', JSON.stringify(targetMonthdValue.value));
+
+        this.setCookie('budgetMonth', this.budgetMonth, 2021, 12, 30);
+        this.setCookie('budgetDay', this.budgetDay, 2021, 12, 30);
+        this.setCookie('expensesMonth', this.expensesMonth, 2021, 12, 30);
+        this.setCookie('addIncome', this.addIncome, 2021, 12, 30);
+        this.setCookie('addExpenses', this.addExpenses, 2021, 12, 30);
+        this.setCookie('calcSavedMoney', incomePeriodValue.value, 2021, 12, 30);
+        this.setCookie('targetMonth', targetMonthdValue.value, 2021, 12, 30);
+        this.setCookie('isLoad', true, 2021, 12, 30);
+        
     }
 
     reset (e) {
@@ -199,7 +225,11 @@ class AppData {
     
         periodSelect.addEventListener('change', () => {
             incomePeriodValue.value = this.calcSavedMoney();
+            localStorage.setItem('calcSavedMoney', JSON.stringify(incomePeriodValue.value));
+            this.setCookie('calcSavedMoney', incomePeriodValue.value, 2021, 12, 30);
         });
+
+        localStorage.clear();
     }
 
     showResult () {
@@ -213,8 +243,21 @@ class AppData {
     
         periodSelect.addEventListener('change', () => {
             incomePeriodValue.value = this.calcSavedMoney();
+            localStorage.setItem('calcSavedMoney', JSON.stringify(incomePeriodValue.value));
+            this.setCookie('calcSavedMoney', incomePeriodValue.value, 2021, 12, 30);
         });  
     }
+
+    showSavedResult () {
+        budgetMonthValue.value = JSON.parse(localStorage.getItem('budgetMonth')) || this.budgetMonth;
+        budgetDayValue.value = JSON.parse(localStorage.getItem('budgetMonth')) || this.budgetDay;
+        expensesMonthValue.value = JSON.parse(localStorage.getItem('expensesMonth')) || this.expensesMonth;
+        additionalExpensesValue.value = JSON.parse(localStorage.getItem('addExpenses')) ||this.addExpenses.join(', ');
+        additionalIncomeValue.value = JSON.parse(localStorage.getItem('addIncome')) || this.addIncome.join(', ');
+        targetMonthdValue.value = JSON.parse(localStorage.getItem('targetMonth')) || this.getTargetMonth();
+        incomePeriodValue.value = JSON.parse(localStorage.getItem('calcSavedMoney')) || this.calcSavedMoney();
+    }
+
 
     getExpenses () {
         expensesItems.forEach(item => {
@@ -424,8 +467,9 @@ class AppData {
 
 
 const appData = new AppData();
-console.log('appData : ', appData );
-
+// console.log('appData : ', appData );
+console.log(decodeURI(document.cookie));
+appData.showSavedResult();
 appData.validation();
 appData.mustFieldCheck();
 appData.eventListeners();
