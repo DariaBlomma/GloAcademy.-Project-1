@@ -1,6 +1,7 @@
 'use strict';
 const square = document.querySelector('.square'),
-    btn = document.querySelector('.btn');
+    btn = document.querySelector('.btn'),
+    reset = document.querySelector('.reset');
 
 let changeInterval;
 let count = 0;
@@ -33,4 +34,17 @@ btn.addEventListener('click', () => {
         animate = false;
         cancelAnimationFrame(changeInterval);
     }
+});
+
+reset.addEventListener('click', () => {
+    square.style.borderRadius = 0 + 'px';
+    square.style.top = 8 + 'px';
+    square.style.width = 200 + 'px';
+    square.style.height = 200 + 'px';
+    square.style.backgroundColor = 'peachpuff';
+    square.style.color = 'black';
+    square.textContent = '';
+    count = 0;
+    animate = false;
+    cancelAnimationFrame(changeInterval);
 });
