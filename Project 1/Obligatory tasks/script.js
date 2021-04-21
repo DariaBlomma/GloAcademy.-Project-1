@@ -85,7 +85,6 @@ class AppData {
         this.budgetDay = 0;
         this.budgetMonth = 0;
         this.expensesMonth = 0;
-        this.valueArr = [];
     }
 
     validation () {
@@ -120,11 +119,8 @@ class AppData {
     //         this.startBtn.removeAttribute('disabled');
     //     }
     // }
+
     setCookie (key, value, year, month, day) {
-        const _this = this;
-        this.valueArr.push(`${value}`.trim());
-        this.valueArr.sort();
-        
         let cookieStr = `${key}=${encodeURI(value)}`;
         if (year) {
             const expires = new Date(year, month - 1, day);
@@ -132,93 +128,69 @@ class AppData {
             document.cookie = cookieStr;
         }
 
-        const checkCookie = () => {
-            // const  cookiesDelete = () => {
-                let cookies = document.cookie.split(";");
-                let keyArr = [];
-                let keyStr = '';
-                let lcKeyArr = [];
-                let lcKeyStr = '';
-                let valueStr = this.valueArr.join('');
-                let lcValueArr = ['true'];
-                let lcValueStr = '';
-                console.log('valueStr: ', valueStr);
-                for(let i=0; i < localStorage.length; i++) {
-                    let lcKey = localStorage.key(i);
-                    //  массивы выдаютс как строки
-                    let lcItem = localStorage.getItem(lcKey);
-                    console.log('lcItem: ', lcItem);
-                    console.log('lcItem.length: ', lcItem.length);
-                    console.log('lcItem type: ', typeof(lcItem));
-                    let json = JSON.parse(localStorage.getItem(lcKey));
-                    console.log('json type: ', typeof(json));
-                    if (lcItem.length === 0) {
-                       // console.log('lcItem: ', lcItem);
-                       //console.log('json: ', json);
-                        // console.log('lcItem: ', lcItem);
-                        lcValueArr.push('');
-                    } else {
-                        lcValueArr.push(json);
-                        lcValueArr.sort();
-                        lcValueStr = lcValueArr.join('');
-                    }
-                    
-                    
+    }
 
-                    
-                    lcKeyArr.push(lcKey.trim());
-                    lcKeyArr.sort();
-                    lcKeyStr =  lcKeyArr.join('');
-                }
-                console.log('lcValueArr: ', lcValueArr);
-                console.log('lcValueStr: ', lcValueStr);
-                for (let i = 0; i < cookies.length; i++) {
-                    let cookie = cookies[i];
-                    let eqPos = cookie.indexOf("=");
-                    let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-                    if (name.trim() !== 'isLoad') {
-                        keyArr.push(name.trim());
-                        keyArr.sort();
-                        keyStr = keyArr.join('');
-                    }
-                    
+    checkCookie () {
+        let cookies = document.cookie.split(";");
+        let keyArr = [];
+        let keyStr = '';
+        let lcKeyArr = ['isLoad'];
+        let lcKeyStr = '';
+        let valueArr = [];
+        let valueStr = '';
+        let lcValueArr = ['true'];
+        let lcValueStr = '';
+        
+        for(let i=0; i < localStorage.length; i++) {
+            let lcKey = localStorage.key(i);
+            let json = JSON.parse(localStorage.getItem(lcKey));
+            if (json.length === 0) {
+                lcValueArr.push('');
+            } else {
+                lcValueArr.push(json);
+                lcValueArr.sort();
+                lcValueStr = lcValueArr.join('');
+            }
 
-                    // console.log('name: ', name);
-                    //document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                    // console.log(decodeURI(document.cookie));
-                    // document.cookie = name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                }
-                
-                // if (keyStr !== lcKeyStr || keyArr.length !== lcKeyArr.length) {
-                //     keyArr.forEach(item => {
-                //         document.cookie = item + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
-                //     });
-                //     localStorage.clear();
-                //     _this.reset();
-                //     console.log('keyStr: ', keyStr);
-                //     console.log(decodeURI(document.cookie));
-                // }
+            lcKeyArr.push(lcKey.trim());
+            lcKeyArr.sort();
+            lcKeyStr =  lcKeyArr.join('');
+        }
 
-                
-                //console.log('keyArr: ', keyArr);
-                // console.log('keyStr: ', keyStr);
-                //console.log('lcKeyArr: ', lcKeyArr);
-                // console.log('lcKeyStr: ', lcKeyStr);
-                console.log(decodeURI(document.cookie));
-            // };
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i]; //key = value
+            let eqPos = cookie.indexOf("=");
+            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            let val = cookie.substr((eqPos + 1));
             
-            //cookiesDelete ();
-            
-        };
+            keyArr.push(name.trim());
+            keyArr.sort();
+            keyStr = keyArr.join('');
 
+            valueArr.push(val);
+            valueArr.sort();
+            valueStr = valueArr.join('');
+        }
+        
+        if (keyStr !== lcKeyStr || valueStr !== lcValueStr || keyArr.length !== lcKeyArr.length) {
+            console.log('before cookies keyStr: ', keyStr);
+            console.log('before lc keys', lcKeyStr);
+            console.log('before cookies value', valueStr);
+            console.log('before lcValueStr: ', lcValueStr);
+            console.log('before', decodeURI(document.cookie));
 
-        
+            keyArr.forEach(item => {
+                document.cookie = item + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;";
+            });
+            localStorage.clear();
+            this.reset();
 
-        checkCookie();
-        
-        
-        //     // console.log(decodeURI(document.cookie));
-        // }
+            console.log('cookies keyStr: ', keyStr);
+            console.log('lc keys', lcKeyStr);
+            console.log('cookies value', valueStr);
+            console.log('lcValueStr: ', lcValueStr);
+            console.log(decodeURI(document.cookie));
+        }
     }
 
     start () {
@@ -261,7 +233,7 @@ class AppData {
         this.setCookie('targetMonth', targetMonthdValue.value, 2021, 12, 30);
         this.setCookie('isLoad', true, 2021, 12, 30);
         
-        
+        console.log('in start' , decodeURI(document.cookie));
         
     }
 
@@ -563,10 +535,9 @@ class AppData {
 
 
 const appData = new AppData();
-//localStorage.clear();
-
 // console.log('appData : ', appData );
-appData.setCookie('trying to delete', 'delete me', 2021, 12, 30);
+//appData.setCookie('trying to delete', 'delete me', 2021, 12, 30);
+appData.checkCookie();
 console.log(decodeURI(document.cookie));
 
 appData.showSavedResult();
