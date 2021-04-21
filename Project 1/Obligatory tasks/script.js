@@ -211,9 +211,11 @@ class AppData {
         depositBank.value = '';
         depositAmount.value = '';
         //  пседвоэлемент нельзя получить из js
-        if (depositCheck.checked) {
-            depositCheckmark.classList.remove('hidden');
-        }
+        // if (depositCheck.checked) {
+        //     depositCheckmark.classList.remove('hidden');
+        // }
+
+        depositCheck.checked = false;
     }
 
     showResult () {
