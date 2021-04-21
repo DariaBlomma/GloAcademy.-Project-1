@@ -1,68 +1,36 @@
 'use strict';
-let print1 = function() {
-	console.log('Крот');
-}
-let print2 = function() {
-	console.log('овце,');
-}
-let print3 = function() {
-	console.log('жирафу,');
-}
-let print4 = function() {
-	console.log('зайке');
-}
-let print5 = function() {
-	console.log('голубые');
-}
-let print6 = function() {
-	console.log('сшил');
-}
-let print7 = function() {
-	console.log('фуфайки');
-}
+const square = document.querySelector('.square'),
+    btn = document.querySelector('.btn');
 
-let func1 = function() {
-	// ...
-    // console.log('function 1');
-    print3();
+let changeInterval;
+let count = 0;
+let changeSquare = function () {
+    changeInterval = requestAnimationFrame(changeSquare);
+    count++;
+    
+    if (count < 101) {
+        square.style.borderRadius = count + 'px';
+    } else if (count < 200) {
+        square.style.top = count / 2 + 'px'; 
+    } else if (count < 300){
+        square.style.width = count * 2 + 'px';
+        square.style.height = count / 3 + 'px';
+    } else if (count < 320) {
+        square.style.backgroundColor = 'purple';
+    } else {
+        square.style.color = 'white';
+        square.textContent = 'This is the end of the animation';
+        cancelAnimationFrame(changeInterval);
+    }
 };
 
-let func2 = function() {
-	func1();
-
-	setTimeout(function() {
-		// ...
-        // console.log('function 2 timeout 1000');
-        print7();
-	}, 1000);
-}
-
-let func3 = function() {
-	setTimeout(function() {
-		func2();
-		// ...
-        // console.log('function setTimeout 250');
-        print4();
-	}, 250);
-
-	// ...
-    // console.log('function 3');
-    print2();
-}
-
-setTimeout(function() {
-	// ... 
-    // console.log('function setTimeout 500');
-    print5();
-
-	setTimeout(function() {
-		// ...
-        // console.log('function setTimeout 750');
-        print6();
-	}, 750);
-}, 500);
-
-// ...
-// console.log('no function');
-print1();
-func3();
+let animate = false;
+btn.addEventListener('click', () => {
+    if(!animate) {
+        changeInterval = requestAnimationFrame(changeSquare);
+        animate = true;
+    } else {
+        animate = false;
+        cancelAnimationFrame(changeInterval);
+    }
+});

@@ -32,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
             //     setTimeout(updateClock, 1000);
             // }
 
-            const idInterval =  setInterval(updateClock, 1000);
+            // const idInterval =  setInterval(updateClock, 1000);
             if (timer.timeRemaining <= 0) {
                 clearInterval(idInterval);
                 timerHours.textContent = '00';
@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 timerSeconds.textContent = '00';
             }
         }
-        updateClock();
+        const idInterval =  setInterval(updateClock, 1000);
 
         // to get remaining days
         // hours = Math.floor((timeRemaining / 60 / 60) % 24);

@@ -1,6 +1,9 @@
-body{
-    font-family: Arial sans-serif;
-}
-ul{
-    list-style-type: none
+.square {
+    position: absolute;
+    background-color: peachpuff;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
