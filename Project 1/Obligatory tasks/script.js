@@ -8,6 +8,8 @@ const startBtn = document.getElementById('start'),
     expensesPlus = document.getElementsByTagName('button')[1],
 
     depositCheck = document.querySelector('#deposit-check'),
+    depositCheckmark = document.querySelector('.deposit-checkmark:after'),
+    
 
     // addExpensesItem1 = document.querySelectorAll('.additional_income-item')[0],
 
@@ -42,6 +44,8 @@ const startBtn = document.getElementById('start'),
     depositBank = document.querySelector('.deposit-bank'),
     depositAmount = document.querySelector('.deposit-amount'),
     depositPercent = document.querySelector('.deposit-percent');
+
+    console.log('depositCheckmark : ', depositCheckmark );
 
 let incomeItems = document.querySelectorAll('.income-items'),
     expensesItems = document.querySelectorAll('.expenses-items');
@@ -196,10 +200,33 @@ class AppData {
         this.expensesMonth = 0;
         periodSelect.value = 1;
         periodAmount.textContent = 1;
-    
+        
         periodSelect.addEventListener('change', () => {
             incomePeriodValue.value = this.calcSavedMoney();
         });
+
+        depositBank.style.display = 'none';
+        depositAmount.style.display = 'none';
+        depositPercent.style.display = 'none';
+        depositBank.value = '';
+        depositAmount.value = '';
+        //  пседвоэлемент нельзя получить из js
+        // depositCheckmark.value = '';
+        // depositCheck.removeEventListener('change', this.depositHandler.bind(this));
+        // depositCheck.addEventListener('change', this.depositHandler.bind(this));
+        // if (depositCheck.checked) {
+        //     depositBank.style.display = 'inline-block';
+        //     depositAmount.style.display = 'inline-block';
+        //     this.deposit = true;
+        //     depositBank.addEventListener('change', this.changePercent);
+        // } else {
+        //     depositBank.style.display = 'none';
+        //     depositAmount.style.display = 'none';
+        //     depositBank.value = '';
+        //     depositAmount.value = '';
+        //     this.deposit = false;
+        //     depositBank.removeEventListener('change', this.changePercent);
+        // }
     }
 
     showResult () {
