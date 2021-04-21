@@ -1,37 +1,68 @@
 'use strict';
-const input = document.getElementById('input'),
-        p = document.querySelector('p');
-// const showText = function() {
-//     p.textContent = input.value;
-// }
-
-// input.addEventListener('input', () => {
-//     const idTimeout = setTimeout(showText, 300);
-// });
-function debounce(f, t) { //f is functiom t is time
-    return function () {
-        let previousCall = this.lastCall;
-        // console.log('previousCall: ', previousCall);
-        this.lastCall = Date.now();
-        // console.log('this.lastCall: ', this.lastCall);
-        if (previousCall && ((this.lastCall - previousCall) <= t)) { //if true previousCall, if it is not the fist time
-            // console.log('this.lastCall - previousCall: ', this.lastCall - previousCall);
-        clearTimeout(this.lastCallTimer);
-        }
-        this.lastCallTimer = setTimeout(() => f(), t);
-    }
+let print1 = function() {
+	console.log('Крот');
 }
-    const showText = function() {
-        p.textContent = input.value;
-    }
+let print2 = function() {
+	console.log('овце,');
+}
+let print3 = function() {
+	console.log('жирафу,');
+}
+let print4 = function() {
+	console.log('зайке');
+}
+let print5 = function() {
+	console.log('голубые');
+}
+let print6 = function() {
+	console.log('сшил');
+}
+let print7 = function() {
+	console.log('фуфайки');
+}
 
-    // let logger = (args) => console.log(`My args are ${args}`);
-   // debounce: call the logger when two seconds have elapsed since the last call
-    // let debouncedLogger = debounce(logger, 2000);
+let func1 = function() {
+	// ...
+    // console.log('function 1');
+    print3();
+};
 
-    // debouncedLogger([1, 2, 3]);
-    // debouncedLogger([4, 5, 6]);
-    // debouncedLogger([7, 8, 9]);
+let func2 = function() {
+	func1();
 
-  // "My args are 7, 8, 9" - logged after two seconds
-input.addEventListener('input', debounce(showText, 300));
+	setTimeout(function() {
+		// ...
+        // console.log('function 2 timeout 1000');
+        print7();
+	}, 1000);
+}
+
+let func3 = function() {
+	setTimeout(function() {
+		func2();
+		// ...
+        // console.log('function setTimeout 250');
+        print4();
+	}, 250);
+
+	// ...
+    // console.log('function 3');
+    print2();
+}
+
+setTimeout(function() {
+	// ... 
+    // console.log('function setTimeout 500');
+    print5();
+
+	setTimeout(function() {
+		// ...
+        // console.log('function setTimeout 750');
+        print6();
+	}, 750);
+}, 500);
+
+// ...
+// console.log('no function');
+print1();
+func3();
