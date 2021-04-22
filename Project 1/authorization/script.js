@@ -15,6 +15,7 @@ let checkPromps = function (field) {
 
 // const isText = /([A-Za-zа-яА-Я]+\s([A-Za-zа-яА-Я]+\s|[A-Za-zа-яА-Я]+))/;
 // const check = new RegExp('([A-Za-zа-яА-Я]+\s([A-Za-zа-яА-Я]+\s|[A-Za-zа-яА-Я]+))', '');
+// should match any word with only 1 space and any word with or without space. Two words are required
 const isText2 = /\D/g;
 
 let userNameCheck = function () {
@@ -27,13 +28,37 @@ let userNameCheck = function () {
     }
 };
 
-// matches any word with only 1 space and any word with or without space. Two words are required
 let usersInfo = [];
-authorize.addEventListener('click', function() {
-    // if (user === null) {
-    //     alert ('Its okay that you dont want to sign up on this strange site. Bye!');
-    // }
+const parsed = JSON.parse(localStorage.getItem('usersInfo'));
+if (parsed) {
+    parsed.forEach(item => {
+        console.log('lc exists');
+        showUsers(item.name, item.surname, item.date);
+    });
+}
 
+const saveUsers = (name, surname, login, password, date) => {
+    let userObj = {
+        'name': name,
+        'surname': surname,
+        'login': login,
+        'password': password,
+        'date': date,
+    };
+
+    usersInfo.push(userObj);
+    localStorage.setItem('usersInfo', JSON.stringify(usersInfo));
+};
+
+const showUsers = function (name, surname, date) {
+    const ul = document.querySelector('ul');
+    const li = document.createElement('li');
+    li.textContent = `Name: ${name}, Surname: ${surname}, Sign up date: ${date}`;
+    ul.append(li);
+};
+
+
+authorize.addEventListener('click', function() {
     do {
         user = prompt(' Write your name and surname');
     } while (checkPromps(user));
@@ -57,11 +82,10 @@ authorize.addEventListener('click', function() {
                 p.innerHTML += ` ${text3} `;
             }
         };
-        // let currMonth= new Date().getMonth();
-        // p.innerHTML += monthsRu[currMonth];
-        // p2.innerHTML += addZero(++currMonth, '.');
-        const currDate = `${currDay} ${monthsRu[currMonth]} ${currYear} ${currTime}`;
+
+    const currDate = `${currDay} ${monthsRu[currMonth]} ${currYear} ${currTime}`;
     showUsers(userName, userSurname, currDate);
+
     do {
         userLogin = prompt('Set your login');
     } while (checkPromps(userLogin));
@@ -70,17 +94,8 @@ authorize.addEventListener('click', function() {
         userPassword = prompt('Set your password');
     } while (checkPromps(userPassword));
 
-    
-    // console.log('user: ', user);
-    
-
-
-
-
-
-
+    saveUsers(userName, userSurname, userLogin, userPassword, currDate);
     // let userObj = {
-        
     //     'name': `${userName}`,
     //     'surname': `${userSurname}`,
     //     'login': `${userLogin}`,
@@ -89,12 +104,15 @@ authorize.addEventListener('click', function() {
 
     // usersInfo.push(userObj);
     // console.log('usersInfo: ', usersInfo);
-    
+    // localStorage.setItem('usersInfo', JSON.stringify(usersInfo));
 });
 
-const showUsers = function (name, surname, date) {
-    const ul = document.querySelector('ul');
-    const li = document.createElement('li');
-    li.textContent = `Name: ${name}, Surname: ${surname}, Sign up date: ${date}`;
-    ul.append(li);
-};
+
+
+
+
+
+
+
+
+
