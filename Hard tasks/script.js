@@ -1,41 +1,13 @@
 'use strict';
-const inputA = document.getElementById('a'),
-    inputB = document.getElementById('b'),
-    sum = document.getElementById('sum'),
-    mult = document.getElementById('mult'),
-    res = document.getElementById('res');
-
-const calculator = {
-    sum: function(){
-      // ваш код
-        return +inputA.value + +inputB.value;
-    },
-    mult: function(){
-      // ваш код
-        return +inputA.value * +inputB.value;
-    },
-    show: function(s){
-      // ваш код
-        if (s) {
-            res.value = this.sum();
-        } else {
-            res.value = this.mult();
-        }
-    },
-    eventListeners: function() {
-        const _this = this;
-        sum.addEventListener('click', () => {
-            this.show(1);
-        });
-        mult.addEventListener('click', () => {
-            this.show();
-        });
-    }
+function getResult(x,y){
+    let result;
+    // ваш код
+    let degree =  String(x ** y);
+    result = degree.split('');
+    result = result.reduce((acc, item) => {
+        return acc + Number(item);
+    }, 0);
+    return result
 }
 
-const start = calculator.eventListeners.bind(calculator);
-start();
-
-
-
-
+console.log(getResult(4, 8))
