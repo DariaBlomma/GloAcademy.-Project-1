@@ -1,50 +1,41 @@
 'use strict';
-const square = document.querySelector('.square'),
-    btn = document.querySelector('.btn'),
-    reset = document.querySelector('.reset');
+const inputA = document.getElementById('a'),
+    inputB = document.getElementById('b'),
+    sum = document.getElementById('sum'),
+    mult = document.getElementById('mult'),
+    res = document.getElementById('res');
 
-let changeInterval;
-let count = 0;
-let changeSquare = function () {
-    changeInterval = requestAnimationFrame(changeSquare);
-    count++;
-    
-    if (count < 101) {
-        square.style.borderRadius = count + 'px';
-    } else if (count < 200) {
-        square.style.top = count / 2 + 'px'; 
-    } else if (count < 300){
-        square.style.width = count * 2 + 'px';
-        square.style.height = count / 3 + 'px';
-    } else if (count < 320) {
-        square.style.backgroundColor = 'purple';
-    } else {
-        square.style.color = 'white';
-        square.textContent = 'This is the end of the animation';
-        cancelAnimationFrame(changeInterval);
+const calculator = {
+    sum: function(){
+      // ваш код
+        return +inputA.value + +inputB.value;
+    },
+    mult: function(){
+      // ваш код
+        return +inputA.value * +inputB.value;
+    },
+    show: function(s){
+      // ваш код
+        if (s) {
+            res.value = this.sum();
+        } else {
+            res.value = this.mult();
+        }
+    },
+    eventListeners: function() {
+        const _this = this;
+        sum.addEventListener('click', () => {
+            this.show(1);
+        });
+        mult.addEventListener('click', () => {
+            this.show();
+        });
     }
-};
+}
 
-let animate = false;
-btn.addEventListener('click', () => {
-    if(!animate) {
-        changeInterval = requestAnimationFrame(changeSquare);
-        animate = true;
-    } else {
-        animate = false;
-        cancelAnimationFrame(changeInterval);
-    }
-});
+const start = calculator.eventListeners.bind(calculator);
+start();
 
-reset.addEventListener('click', () => {
-    square.style.borderRadius = 0 + 'px';
-    square.style.top = 8 + 'px';
-    square.style.width = 200 + 'px';
-    square.style.height = 200 + 'px';
-    square.style.backgroundColor = 'peachpuff';
-    square.style.color = 'black';
-    square.textContent = '';
-    count = 0;
-    animate = false;
-    cancelAnimationFrame(changeInterval);
-});
+
+
+

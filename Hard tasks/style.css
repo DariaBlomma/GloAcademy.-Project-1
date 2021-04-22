@@ -1,18 +1,4 @@
-.square {
-    position: absolute;
-    background-color: peachpuff;
-    width: 200px;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.reset, .btn {
-    position: absolute;
-    right: 0;
-}
-
-.btn {
-    top: 30px;
-}
+input{
+    display: block;
+    margin: 10px 0;
+  }
