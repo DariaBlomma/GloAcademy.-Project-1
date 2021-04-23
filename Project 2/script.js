@@ -53,14 +53,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // menu
     const toggleMenu = () => {
-        const menuBtn = document.querySelector('.menu'),
-            menuBlock = document.querySelector('menu');
+        const menuBlock = document.querySelector('menu');
 
         let showInterval;
         let count = 0;
         const menuShow = () => {
             showInterval = requestAnimationFrame(menuShow);
-            count++;
+            count += 2;
             if (count < 101) {
                 menuBlock.style.transform = `translate(${count}%)`; // 100%
             } else {
@@ -73,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const menuHide = () => {
             hideInterval = requestAnimationFrame(menuHide);
             const width = menuBlock.clientWidth;
-            countHide += 4;
+            countHide += 5;
             if (countHide < width) {
                 menuBlock.style.left = `${countHide}px`;
             } else {
@@ -91,27 +90,29 @@ window.addEventListener('DOMContentLoaded', () => {
             // menuBlock.classList.toggle('active-menu');
         };
 
-        menuBtn.addEventListener('click', () => {
-            if (screen.width > 768) {
-                countHide = 0;
-                menuBlock.style.left = 0;
-                menuShow();
-                count = 0;
-            } else {
-                handlerMenu();
-            }
-        });
-
         document.body.addEventListener('click', event => {
             let target = event.target;
+            if (target.closest('.menu')) {
+                console.log('menu click');
+                if (screen.width > 768) {
+                    countHide = 0;
+                    menuBlock.style.left = 0;
+                    menuShow();
+                    count = 0;
+                } else {
+                    handlerMenu();
+                }
+            }
             if (target.classList.contains('close-btn')) {
                 if (screen.width > 768) {
+                    count = 0;
                     menuHide();
                 } else {
                     handlerMenu();
                 }
             } else if (target.closest('menu ul>li>a')) {
                 if (screen.width > 768) {
+                    count = 0;
                     menuHide();
                 } else {
                     handlerMenu();
@@ -120,6 +121,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 target = target.closest('menu');
                 if (!target && !event.target.closest('.menu')) {
                     if (screen.width > 768) {
+                        count = 0;
                         menuHide();
                     } else {
                         handlerMenu();
