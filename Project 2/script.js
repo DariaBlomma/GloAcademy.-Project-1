@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
             let target = event.target;
             if (target.closest('.menu')) {
                 console.log('menu click');
-                if (screen.width > 768) {
+                if (window.innerWidth > 768) {
                     countHide = 0;
                     menuBlock.style.left = 0;
                     menuShow();
@@ -104,14 +104,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
             if (target.classList.contains('close-btn')) {
-                if (screen.width > 768) {
+                if (window.innerWidth > 768) {
                     count = 0;
                     menuHide();
                 } else {
                     handlerMenu();
                 }
             } else if (target.closest('menu ul>li>a')) {
-                if (screen.width > 768) {
+                if (window.innerWidth > 768) {
                     count = 0;
                     menuHide();
                 } else {
@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
             } else {
                 target = target.closest('menu');
                 if (!target && !event.target.closest('.menu')) {
-                    if (screen.width > 768) {
+                    if (window.innerWidth > 768) {
                         count = 0;
                         menuHide();
                     } else {
