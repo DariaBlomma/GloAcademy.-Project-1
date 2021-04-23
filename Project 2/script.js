@@ -96,14 +96,46 @@ window.addEventListener('DOMContentLoaded', () => {
         const popup = document.querySelector('.popup'),
             popupBtns = document.querySelectorAll('.popup-btn'),
             popupClose = document.querySelector('.popup-close');
-        popupBtns.forEach(item => {
-            item.addEventListener('click', () => {
+
+        let popupIntervalShow;
+        let count = 0;
+        const popupShow = () => {
+            popupIntervalShow = requestAnimationFrame(popupShow);
+            count += 0.01;
+            if (count < 1) {
                 popup.style.display = 'block';
-            });
+                popup.style.opacity = `${count}`;
+            } else {
+                cancelAnimationFrame(popupIntervalShow);
+                count = 0;
+            }
+        };
+        let popupIntervalHide;
+        let countHide = 1;
+        const popupHide = () => {
+            popupIntervalHide = requestAnimationFrame(popupHide);
+            countHide -= 0.01;
+            if (countHide > 0) {
+                popup.style.opacity = `${countHide}`;
+            } else {
+                popup.style.display = 'none';
+                cancelAnimationFrame(popupIntervalHide);
+                countHide = 1;
+            }
+        };
+        // popupBtns.forEach(item => {
+        //     item.addEventListener('click', () => {
+        //         popup.style.display = 'block';
+        //     });
+        // });
+        // popupClose.addEventListener('click', () => {
+        //     popup.style.display = 'none';
+        // });
+        popupBtns.forEach(item => {
+            item.addEventListener('click', popupShow);
         });
-        popupClose.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
+
+        popupClose.addEventListener('click', popupHide);
     };
     togglePopUp();
 
