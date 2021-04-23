@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // menuBlock.classList.toggle('active-menu');
         };
 
-        if (screen.width > 768) {
+        if (window.innerWidth > 768) {
             menuBtn.addEventListener('click', () => {
                 removeInterval = requestAnimationFrame(btnAnimate);
                 count = 0;
