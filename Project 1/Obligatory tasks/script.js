@@ -100,6 +100,7 @@ class AppData {
     // }
 
     start () {
+        console.log('in start');
         this.mustFieldCheck();
         // let allinput = document.querySelector('.data input [type="text"]');
         // allinput.forEach(item => {
@@ -116,11 +117,15 @@ class AppData {
         // this.getExpenses();
         // this.getIncome();
         this.getExpInc();
-        this.getExpensesMonth();// суммируем расхо
+        console.log('after getExInc');
+        // this.getExpensesMonth();// суммируем расхо
+        // console.log('after getExpensesMonth');
         // this.getAddExpenses();
         // this.getAddIncome();
-        this.getAddExpInc ();
+        this.getAddExpInc();
+        console.log('after getAddExpInc');
         this.getBudget(); // считаем budgetMonth, budgetDay
+        console.log('after getBudget');
         this.showResult();
     }
 
@@ -232,41 +237,63 @@ class AppData {
             console.log('itemAmount: ', itemAmount);
             if(itemTitle !== '' && itemAmount !== '') {
                 this[startStr][itemTitle] = +itemAmount;
+                console.log('this[startStr][itemTitle]: ', this[startStr][itemTitle]);
             }
+
+            for (const key in this[startStr]) {
+                console.log('key: ', key);
+                this[`${startStr}Month`] += +this[startStr][key];
+                console.log(' this[`${startStr}Month`]: ',  this[`${startStr}Month`]);
+                console.log('this.startStrMonth: ', this[`${startStr}Month`]);
+            }
+
+            return this[`${startStr}Month`];
         };
 
+        incomeItems = document.querySelectorAll('.income-items');
+        console.log('incomeItem: ', incomeItems);
+        expensesItems = document.querySelectorAll('.expenses-items');
+        console.log('expensesItems: ', expensesItems);
         incomeItems.forEach(count);
         expensesItems.forEach(count);
-
-        for (const key in this.income) {
-            console.log('key: ', key);
-            this.incomeMonth += +this.income[key];
-            console.log('this.incomeMonth: ', this.incomeMonth);
-        }
-
+        console.log('this.income', this.income);
+        console.log('this.expenses', this.expenses);
     }
 
     getAddExpInc () {
+        console.log('in getAddExpInc');
         const addExpenses = additionalExpensesItem.value.split(',');
+        console.log('addExpenses: ', addExpenses);
         let startStr = additionalExpensesItem.className.slice(`${additionalExpensesItem.className.indexOf('_') + 1}`).split('-')[0]; //expenses
+        console.log('startStr: ', startStr);
         let startStrCap = startStr.replace(startStr[0], startStr[0].toUpperCase());
+        console.log('startStrCap: ', startStrCap);
         
-        const push = (item) => {
+        const push = item => {
+            console.log('item: ', item);
             item.trim();
             if(item !== '') {
+                console.log('item !== ')
                 this[`add${startStrCap}`].push(item);
+                console.log('this[`add${startStrCap}`]: ', this[`add${startStrCap}`]);
             }
         };
 
         const count = elem => {
+            console.log('elem: ', elem);
             startStr = elem.className.slice(`${elem.className.indexOf('_') + 1}`).split('-')[0]; //income
+            console.log('startStr: ', startStr);
             startStrCap = startStr.replace(startStr[0], startStr[0].toUpperCase());
+            console.log('startStrCap: ', startStrCap);
             elem = elem.value;
-            push (elem);
+            console.log('elem: ', elem);
+            push(elem);
         };
 
         addExpenses.forEach(push);
+        console.log('addExpenses: ', addExpenses);
         additonalIncomeItem.forEach(count);
+        console.log('additonalIncomeItem: ', additonalIncomeItem);
     }
 
     // addExpensesBlock () {
@@ -298,18 +325,26 @@ class AppData {
     }
 // somewhere here is my problem
     addExpIncBlock (parent, item, btn) { 
+        console.log('in addExpIncBlock');
          // item = our variable expensesItems or incomeItems    
         if (parent === 'expenses') {
+            console.log('parent === expenses');
             btn =  expensesPlus;
+            console.log('btn: ', btn);
             item = expensesItems;
+            console.log('item: ', item);
         } else {
             btn =  incomePlus;
+            console.log('btn : ', btn );
         }
 
         let cloneItem = item[0].cloneNode(true);
+        console.log('cloneItem: ', cloneItem);
         let cloneChildren = cloneItem.children;
+        console.log('cloneChildren: ', cloneChildren);
         for (let i = 0; i < cloneChildren.length; i++) {
             cloneChildren[i].value = '';
+            console.log('cloneChildren[i]: ', cloneChildren[i]);
         }
 
         btn.before(cloneItem);
@@ -317,6 +352,7 @@ class AppData {
         item = document.querySelectorAll(`.${parent}-items`);
         console.log('expensesItems: ', item);
         if(item.length === 3) {
+            console.log('item.length === 3 ');
             btn.style.display = 'none';
         } 
     }
@@ -330,13 +366,13 @@ class AppData {
             //appData.addExpenses = addExpenses.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()).split(', ');
     }
 
-    getExpensesMonth () {
-        // просуммировали расходы
-        for (const key in this.expenses) {
-            this.expensesMonth += this.expenses[key];
-        }
-        return this.expensesMonth;
-    }
+    // getExpensesMonth () {
+    //     // просуммировали расходы
+    //     for (const key in this.expenses) {
+    //         this.expensesMonth += this.expenses[key];
+    //     }
+    //     return this.expensesMonth;
+    // }
     
     getBudget () {
     //Бюджет на месяц вычисляется по формуле: доходы минус сумма расходов, т е предыдущая функциия
@@ -422,7 +458,7 @@ class AppData {
         incomePlus.addEventListener('click', (e) => {
             // this.addIncomeBlock();
             
-            // this.addExpIncBlock(`${e.target.parentElement.className}`, incomeItems);
+            this.addExpIncBlock(`${e.target.parentElement.className}`, incomeItems);
             this.validation();
         });
 
