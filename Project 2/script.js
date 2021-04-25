@@ -58,6 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
         let showInterval;
         let count = 0;
         const menuShow = () => {
+            console.log('in menu show');
             showInterval = requestAnimationFrame(menuShow);
             count += 2;
             if (count < 101) {
@@ -70,6 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
         let hideInterval;
         let countHide = 0;
         const menuHide = () => {
+            console.log('in menu hide');
             hideInterval = requestAnimationFrame(menuHide);
             const width = menuBlock.clientWidth;
             countHide += 5;
@@ -81,6 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
         const handlerMenu = () => {
+            console.log('in handler menu');
             if (!menuBlock.style.transform || menuBlock.style.transform === `translate(-100%)`) {
                 menuBlock.style.transform = `translate(0)`;
             } else {
@@ -92,18 +95,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
         document.body.addEventListener('click', event => {
             let target = event.target;
+            console.log('target: ', target);
             if (target.closest('.menu')) {
                 console.log('menu click');
                 if (window.innerWidth > 768) {
                     countHide = 0;
                     menuBlock.style.left = 0;
+                    menuBlock.classList.add('shown');
+                    console.log('will show menu');
                     menuShow();
                     count = 0;
                 } else {
                     handlerMenu();
                 }
-            }
-            if (target.classList.contains('close-btn')) {
+            } else  if (target.classList.contains('close-btn')) {
+                menuBlock.classList.remove('shown');
                 if (window.innerWidth > 768) {
                     count = 0;
                     menuHide();
@@ -111,6 +117,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     handlerMenu();
                 }
             } else if (target.closest('menu ul>li>a')) {
+                menuBlock.classList.remove('shown');
                 if (window.innerWidth > 768) {
                     count = 0;
                     menuHide();
@@ -119,7 +126,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             } else {
                 target = target.closest('menu');
-                if (!target && !event.target.closest('.menu')) {
+                if (!target && !event.target.closest('.menu') && menuBlock.classList.contains('shown')) {
+                    menuBlock.classList.remove('shown');
                     if (window.innerWidth > 768) {
                         count = 0;
                         menuHide();
@@ -128,7 +136,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-
         });
     };
     toggleMenu();
