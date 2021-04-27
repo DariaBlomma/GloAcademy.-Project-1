@@ -59,12 +59,14 @@ window.addEventListener('DOMContentLoaded', () => {
         let count = 0;
         const menuShow = () => {
             console.log('in menu show');
+            menuBlock.style.left = 0;
             showInterval = requestAnimationFrame(menuShow);
             count += 2;
             if (count < 101) {
                 menuBlock.style.transform = `translate(${count}%)`; // 100%
             } else {
                 cancelAnimationFrame(showInterval);
+                count = 0;
             }
         };
 
@@ -79,11 +81,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 menuBlock.style.left = `${countHide}px`;
             } else {
                 cancelAnimationFrame(hideInterval);
+                countHide = 0;
             }
         };
 
         const handlerMenu = () => {
             console.log('in handler menu');
+            countHide = 0;
+            menuBlock.style.left = 0;
             if (!menuBlock.style.transform || menuBlock.style.transform === `translate(-100%)`) {
                 menuBlock.style.transform = `translate(0)`;
             } else {
@@ -99,19 +104,15 @@ window.addEventListener('DOMContentLoaded', () => {
             if (target.closest('.menu')) {
                 console.log('menu click');
                 if (window.innerWidth > 768) {
-                    countHide = 0;
-                    menuBlock.style.left = 0;
                     menuBlock.classList.add('shown');
                     console.log('will show menu');
                     menuShow();
-                    count = 0;
                 } else {
                     handlerMenu();
                 }
             } else  if (target.classList.contains('close-btn')) {
                 menuBlock.classList.remove('shown');
                 if (window.innerWidth > 768) {
-                    count = 0;
                     menuHide();
                 } else {
                     handlerMenu();
@@ -119,7 +120,6 @@ window.addEventListener('DOMContentLoaded', () => {
             } else if (target.closest('menu ul>li>a')) {
                 menuBlock.classList.remove('shown');
                 if (window.innerWidth > 768) {
-                    count = 0;
                     menuHide();
                 } else {
                     handlerMenu();
@@ -129,7 +129,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (!target && !event.target.closest('.menu') && menuBlock.classList.contains('shown')) {
                     menuBlock.classList.remove('shown');
                     if (window.innerWidth > 768) {
-                        count = 0;
                         menuHide();
                     } else {
                         handlerMenu();
