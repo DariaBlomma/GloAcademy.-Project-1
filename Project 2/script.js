@@ -88,8 +88,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const handlerMenu = () => {
             console.log('in handler menu');
             countHide = 0;
+            count = 0;
             menuBlock.style.left = 0;
-            if (!menuBlock.style.transform || menuBlock.style.transform === `translate(-100%)`) {
+            if (!menuBlock.style.transform || menuBlock.style.transform === `translate(-100%)` ||
+            menuBlock.style.transform === `translate(100%)`) {
                 menuBlock.style.transform = `translate(0)`;
             } else {
                 menuBlock.style.transform = `translate(-100%)`;
