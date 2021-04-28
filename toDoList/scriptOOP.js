@@ -6,6 +6,8 @@ class Todo {
         this.todoList = document.querySelector(todoList);
         this.todoCompleted = document.querySelector(todoCompleted);
         this.todoData = new Map(JSON.parse(localStorage.getItem('todoList')));
+        // this.completedInterval;
+        // this.completeCount = 0;
     }
 
     addToStorage() {
@@ -18,6 +20,16 @@ class Todo {
         this.addToStorage();
     }
 
+    changeCompletion(elem, liElem) {
+        if (elem.completed) {
+            this.todoCompleted.append(liElem);
+           // this.animateCompleted(btnComplete);
+        } else {
+            this.todoList.append(liElem);
+        }
+    }
+
+
     createItem(item) {
         const li = document.createElement('li');
         li.classList.add('todo-item');
@@ -28,11 +40,15 @@ class Todo {
             <button class="todo-remove"></button>
             <button class="todo-complete"></button>
         </div>`);
-        if (item.completed) {
-            this.todoCompleted.append(li);
-        } else {
-            this.todoList.append(li);
-        }
+        const btnComplete = li.querySelector('.todo-complete');
+        
+        // if (item.completed) {
+        //     this.todoCompleted.append(li);
+        //    // this.animateCompleted(btnComplete);
+        // } else {
+        //     this.todoList.append(li);
+        // }
+        this.changeCompletion(item, li);
     }
 
     addTodo(e) {
@@ -59,6 +75,8 @@ class Todo {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
+
+
     deleteItem(elem, key) {
 // find by key elem, delete, render
         elem.remove();
@@ -67,29 +85,90 @@ class Todo {
         this.addToStorage();
     }
 
-    completedItem(key) {
+    completedItem(el, key) {
         // foreach toododata, find by key what we clicked, change completed to true
         const item = this.todoData.get(key);
+        const btn = el.querySelector('.todo-complete');
+        // console.log('btn: ', btn);
         if (!item.completed) {
             item.completed = true;
-            this.render();
+            // this.render();
+            this.changeCompletion(item, el);
             this.addToStorage();
+            this.animateCompleted(key);
         } else {
             item.completed = false;
-            this.render();
+            //this.render();
+            this.changeCompletion(item, el);
             this.addToStorage();
         }
 
     }
+
+    animateCompleted(key) {
+        const lis = document.querySelectorAll('.todo-item');;
+        lis.forEach(item => {
+            if (item.key === key) {
+                const btn = item.querySelector('.todo-complete');
+                btn.classList.add('animate-complete');                
+            }
+        })
+        const btnAnim = document.querySelector('.animate-complete');
+
+        Todo.completedInterval = requestAnimationFrame(this.animateCompleted.bind(this));
+        Todo.completeCount += 3;
+        
+        if (Todo.completeCount < 50) {
+            btnAnim.style.backgroundSize = `${Todo.completeCount}px`;
+        } else {
+            btnAnim.style.backgroundSize = '';
+            cancelAnimationFrame(Todo.completedInterval);
+            Todo.completeCount = 0;
+        }
+    }
+
+    animateDeletion(key) {
+        console.log('key: ', key);
+        const lis = document.querySelectorAll('.todo-item');;
+        console.log(' lis: ',  lis);
+        lis.forEach(item => {
+            if (item.key === key) {
+                const btn = item.querySelector('.todo-remove');
+                item.classList.add('animate-remove');                
+                console.log('item: ', item);
+            }
+        })
+        const liAnim = document.querySelector('.animate-remove');
+        console.log('liAnim: ', liAnim);
+
+        Todo.deleteInterval = requestAnimationFrame(this.animateDeletion.bind(this));
+        Todo.deleteCount -= 0.01;
+        
+        
+        if (Todo.deleteCount > 0) {
+            console.log('Todo.deleteCount: ', Todo.deleteCount);
+            
+            liAnim.style.textDecoration = 'line-through';
+            console.log('liAnim.style.textDecoration: ', liAnim.style.textDecoration);
+            liAnim.style.opacity = `${Todo.deleteCount}`;
+            console.log('liAnim.style.opacity: ', liAnim.style.opacity);
+        } else {
+            cancelAnimationFrame(Todo.deleteInterval);
+            Todo.deleteCount = 1;
+            //liAnim.style.opacity = '';
+        }
+    }
+
 
     handler() {
         const todoContainer = document.querySelector('.todo-container');
         todoContainer.addEventListener('click', event => {
             let target = event.target;
             if (target.matches('.todo-remove')) {
+                this.animateDeletion(target.closest('.todo-item').key);
                 this.deleteItem(target.closest('.todo-item'), target.closest('.todo-item').key);
             } else if (target.matches('.todo-complete')) {
-                this.completedItem(target.closest('.todo-item').key);
+                this.completedItem(target.closest('.todo-item'), target.closest('.todo-item').key);
             }
         })
     }
@@ -102,4 +181,8 @@ class Todo {
 }
 
 const todo = new Todo('.todo-control', '.header-input', '.todo-list', '.todo-completed');
+Todo.completedInterval;
+Todo.completeCount = 0;
+Todo.deleteInterval;
+Todo.deleteCount = 1;
 todo.init();
