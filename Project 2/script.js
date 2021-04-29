@@ -418,4 +418,104 @@ window.addEventListener('DOMContentLoaded', () => {
         startSlide(1500);
     };
     slider();
+
+    // team photos
+    const changePhotos = () => {
+        const teamImgs = document.querySelectorAll('.command__photo'),
+            teamWrapper = document.querySelector('.command'),
+            initialSrc = [];
+
+        teamImgs.forEach(item => {
+            const src = item.getAttribute('src');
+            initialSrc.push(src);
+        });
+
+        teamWrapper.addEventListener('mouseover', event => {
+            teamImgs.forEach(item => {
+                if (event.target === item) {
+                    event.target.src = event.target.dataset.img;
+                }
+            });
+        });
+        teamWrapper.addEventListener('mouseout', event => {
+            teamImgs.forEach((item, index) => {
+                if (event.target === item) {
+                    event.target.src = initialSrc[index];
+                }
+            });
+        });
+    };
+
+    changePhotos();
+
+    //calculator
+    const validation = () => {
+        const numbers = event => {
+            const target = event.target;
+            if (target.matches('.calc-count') || target.matches('.calc-square') || target.matches('.calc-day')) {
+                target.value = target.value.replace(/\D/g, '');
+            }
+        };
+
+        const rusText = event => {
+            const namePLaceholders = document.querySelectorAll('[placeholder="Ваше имя"');
+            const messagePLaceholders = document.querySelectorAll('[placeholder="Ваше сообщение"');
+
+            const target = event.target;
+            namePLaceholders.forEach(item => {
+                if (item === target) {
+                    target.value = target.value.replace(/[^А-яё\s-]*/ig, '');
+                }
+            });
+
+            messagePLaceholders.forEach(item => {
+                if (item === target) {
+                    target.value = target.value.replace(/[^А-яё\s-]*/ig, '');
+                }
+            });
+        };
+
+        const email = event => {
+            const target = event.target;
+            const emailFields = document.querySelectorAll('[type="email"]');
+            emailFields.forEach(item => {
+                if (item === target) {
+                    target.value = target.value.replace(/[^A-z]+[^@\-\_\.\!\~\*\']*/ig, '');
+                    // [^A-z][^@-_\.!~\*']
+                }
+            });
+        };
+
+        const phone = event => {
+            const target = event.target;
+            const telFields = document.querySelectorAll('[type="tel"');
+            telFields.forEach(item => {
+                if (item === target) {
+                    target.value = target.value.replace(/\D[^-()]/g, '');
+                }
+            });
+        };
+
+        const calcBlock = document.querySelector('.calc-block');
+        calcBlock.addEventListener('input', numbers);
+        document.addEventListener('input', rusText);
+        document.addEventListener('input', email);
+        document.addEventListener('input', phone);
+        document.addEventListener('blur', event => {
+            const target = event.target;
+            const val = target.value.match(/\s+/g);
+            console.log('target.value: ', target.value);
+            console.log('val: ', val);
+            target.value = target.value.replace(/-+/g, '-');
+            target.value = target.value.replace(/\s+/g, ' ');
+            target.value = target.value.replace(/^\s/g, '');
+            target.value = target.value.replace(/\s$/g, '');
+            target.value = target.value.toLowerCase().replace(/\b[А-яё]/ig, val1 => val1.toUpperCase());
+            console.log('target.value: ', target.value);
+        }, true);
+
+    };
+
+    validation();
+
 });
