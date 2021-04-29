@@ -77,7 +77,7 @@ class Todo {
 
 
 
-    deleteItem(elem, key) {
+    deleteItem(key, elem) {
 // find by key elem, delete, render
         elem.remove();
         this.todoData.delete(key);
@@ -127,7 +127,8 @@ class Todo {
         }
     }
 
-    animateDeletion(key) {
+    animateDeletion(key, elem) {
+        // console.log('callback: ', callback);
         console.log('key: ', key);
         const lis = document.querySelectorAll('.todo-item');;
         console.log(' lis: ',  lis);
@@ -155,8 +156,15 @@ class Todo {
         } else {
             cancelAnimationFrame(Todo.deleteInterval);
             Todo.deleteCount = 1;
+            console.log('after cancelling animation');
             //liAnim.style.opacity = '';
+            liAnim.remove();
+            this.todoData.delete(liAnim.key);
+            console.log('this.todoData: ', this.todoData);
+            this.addToStorage();
+            console.log('after deletion');
         }
+
     }
 
 
@@ -165,8 +173,12 @@ class Todo {
         todoContainer.addEventListener('click', event => {
             let target = event.target;
             if (target.matches('.todo-remove')) {
-                this.animateDeletion(target.closest('.todo-item').key);
-                this.deleteItem(target.closest('.todo-item'), target.closest('.todo-item').key);
+                // this.animateDeletion(target.closest('.todo-item').key);
+                this.animateDeletion(target.closest('.todo-item').key, target.closest('.todo-item'));
+                //setTimeout
+                console.log('after animation with callback');
+               // this.deleteItem(target.closest('.todo-item'), target.closest('.todo-item').key);
+                
             } else if (target.matches('.todo-complete')) {
                 this.completedItem(target.closest('.todo-item'), target.closest('.todo-item').key);
             }
