@@ -465,6 +465,7 @@ window.addEventListener('DOMContentLoaded', () => {
             namePLaceholders.forEach(item => {
                 if (item === target) {
                     target.value = target.value.replace(/[^А-яё\s-]*/ig, '');
+                    target.value = target.value.toLowerCase().replace(/^.|\s./g, match => match.toUpperCase());
                 }
             });
 
@@ -503,15 +504,10 @@ window.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('input', phone);
         document.addEventListener('blur', event => {
             const target = event.target;
-            const val = target.value.match(/\s+/g);
-            console.log('target.value: ', target.value);
-            console.log('val: ', val);
             target.value = target.value.replace(/-+/g, '-');
             target.value = target.value.replace(/\s+/g, ' ');
             target.value = target.value.replace(/^\s/g, '');
             target.value = target.value.replace(/\s$/g, '');
-            target.value = target.value.toLowerCase().replace(/\b[А-яё]/ig, val1 => val1.toUpperCase());
-            console.log('target.value: ', target.value);
         }, true);
 
     };
