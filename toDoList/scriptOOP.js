@@ -39,7 +39,9 @@ class Todo {
         <div class="todo-buttons">
             <button class="todo-remove"></button>
             <button class="todo-complete"></button>
+            <button class="todo-edit"></button>
         </div>`);
+        
         const btnComplete = li.querySelector('.todo-complete');
         
         // if (item.completed) {
@@ -129,44 +131,69 @@ class Todo {
 
     animateDeletion(key, elem) {
         // console.log('callback: ', callback);
-        console.log('key: ', key);
+        // console.log('key: ', key);
         const lis = document.querySelectorAll('.todo-item');;
-        console.log(' lis: ',  lis);
         lis.forEach(item => {
             if (item.key === key) {
                 const btn = item.querySelector('.todo-remove');
                 item.classList.add('animate-remove');                
-                console.log('item: ', item);
             }
         })
         const liAnim = document.querySelector('.animate-remove');
-        console.log('liAnim: ', liAnim);
+        // console.log('liAnim: ', liAnim);
 
         Todo.deleteInterval = requestAnimationFrame(this.animateDeletion.bind(this));
         Todo.deleteCount -= 0.01;
         
         
         if (Todo.deleteCount > 0) {
-            console.log('Todo.deleteCount: ', Todo.deleteCount);
+            // console.log('Todo.deleteCount: ', Todo.deleteCount);
             
             liAnim.style.textDecoration = 'line-through';
-            console.log('liAnim.style.textDecoration: ', liAnim.style.textDecoration);
+            // console.log('liAnim.style.textDecoration: ', liAnim.style.textDecoration);
             liAnim.style.opacity = `${Todo.deleteCount}`;
-            console.log('liAnim.style.opacity: ', liAnim.style.opacity);
+            // console.log('liAnim.style.opacity: ', liAnim.style.opacity);
         } else {
             cancelAnimationFrame(Todo.deleteInterval);
             Todo.deleteCount = 1;
-            console.log('after cancelling animation');
+            // console.log('after cancelling animation');
             //liAnim.style.opacity = '';
             liAnim.remove();
             this.todoData.delete(liAnim.key);
-            console.log('this.todoData: ', this.todoData);
+            // console.log('this.todoData: ', this.todoData);
             this.addToStorage();
-            console.log('after deletion');
+            // console.log('after deletion');
         }
 
     }
 
+    editContent(key) {
+        const lis = document.querySelectorAll('.todo-item');
+        lis.forEach(item => {
+            if (item.key === key) {
+                item.querySelector('.text-todo').setAttribute('contenteditable', 'true');
+            }
+        });
+        
+
+        document.addEventListener('blur', event => {
+            console.log('(event.target: ', event.target);
+            if (event.target.matches('.text-todo')) {
+                const keyLi = event.target.closest('.todo-item').key;
+                for (let [key, value] of this.todoData) {
+                    if (keyLi === key) {
+                        value.value = event.target.textContent;
+                    }
+                }
+                this.addToStorage();
+                console.log(this.todoData);
+            }
+
+        }, true)
+
+
+        
+    }
 
     handler() {
         const todoContainer = document.querySelector('.todo-container');
@@ -175,12 +202,14 @@ class Todo {
             if (target.matches('.todo-remove')) {
                 // this.animateDeletion(target.closest('.todo-item').key);
                 this.animateDeletion(target.closest('.todo-item').key, target.closest('.todo-item'));
-                //setTimeout
-                console.log('after animation with callback');
+                //setTimeout? callback?
+                // console.log('after animation with callback');
                // this.deleteItem(target.closest('.todo-item'), target.closest('.todo-item').key);
                 
             } else if (target.matches('.todo-complete')) {
                 this.completedItem(target.closest('.todo-item'), target.closest('.todo-item').key);
+            } else if (target.matches('.todo-edit')) {
+                this.editContent(target.closest('.todo-item').key);
             }
         })
     }

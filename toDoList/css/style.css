@@ -144,7 +144,8 @@ body {
 }
 
 .todo-buttons {
-    width: 100px;
+    /* width: 100px; */
+    width: 150px;
     height: 50px;
 
     position: absolute;
@@ -180,9 +181,13 @@ body {
     left: 0;
 }
 
+.todo-edit {
+    background-image: url("../img/edit.svg");
+    background-size: 32px;
+}
 .todo-remove {
-     background-image: url("../img/trash.png");
- }
+    background-image: url("../img/trash.png");
+}
 
 .todo-complete {
     background-image: url("../img/uncheck.png");
