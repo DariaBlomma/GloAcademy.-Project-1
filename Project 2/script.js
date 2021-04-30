@@ -481,8 +481,9 @@ window.addEventListener('DOMContentLoaded', () => {
             const emailFields = document.querySelectorAll('[type="email"]');
             emailFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^A-z]+[^@\-\_\.\!\~\*\']*/ig, '');
+                    target.value = target.value.replace(/[^А-яё_@!~'\*\.-]/ig, '');
                     // [^A-z][^@-_\.!~\*']
+                    //[^А-яё_@!~'\*\.-]
                 }
             });
         };
