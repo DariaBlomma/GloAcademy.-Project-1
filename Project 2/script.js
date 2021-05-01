@@ -143,8 +143,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //popup
     const togglePopUp = () => {
-        const popup = document.querySelector('.popup'),
-            popupBtns = document.querySelectorAll('.popup-btn');
+        const popup = document.querySelector('.popup');
 
         let popupIntervalShow;
         let count = 0;
@@ -180,21 +179,57 @@ window.addEventListener('DOMContentLoaded', () => {
         // popupClose.addEventListener('click', () => {
         //     popup.style.display = 'none';
         // });
-        popupBtns.forEach(item => {
-            item.addEventListener('click', popupShow);
-        });
+        // popupBtns.forEach(item => {
+        //     item.addEventListener('click', popupShow);
+        // });
 
-        popup.addEventListener('click', event => {
-            let target = event.target;
-            if (target.classList.contains('popup-close')) {
-                popupHide();
+        // popup.addEventListener('click', event => {
+        //     let target = event.target;
+        //     if (target.classList.contains('popup-close')) {
+        //         popupHide();
+        //     } else {
+        //         target = target.closest('.popup-content');
+        //         if (!target) {
+        //             popupHide();
+        //         }
+        //     }
+
+        // });
+        const popupHandler = () => {
+            if (popup.style.display === '' ||  popup.style.display === 'none') {
+                popup.style.opacity = 1;
+                popup.style.display = 'block';
             } else {
-                target = target.closest('.popup-content');
-                if (!target) {
-                    popupHide();
+                popup.style.opacity = 0;
+                popup.style.display = 'none';
+            }
+        };
+
+        document.addEventListener('click', event => {
+            let target = event.target;
+            if (target.matches('.popup-btn')) {
+                if (window.innerWidth > 768) {
+                    popupShow();
+                } else {
+                    popupHandler();
                 }
             }
-
+            if (target.classList.contains('popup-close')) {
+                if (window.innerWidth > 768) {
+                    popupHide();
+                } else {
+                    popupHandler();
+                }
+            } else {
+                target = target.closest('.popup-content');
+                if (!target && !event.target.matches('.popup-btn')) {
+                    if (window.innerWidth > 768) {
+                        popupHide();
+                    } else {
+                        popupHandler();
+                    }
+                }
+            }
         });
     };
     togglePopUp();
