@@ -343,7 +343,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const dots = document.querySelectorAll('.dot'),
             slider = document.querySelector('.portfolio-content');
 
-
+        dots[0].classList.add('dot-active');
         let currentSlide = 0;
         let interval;
         const prevSlide = (elem, index, strClass) => {
@@ -415,7 +415,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 startSlide();
             }
         });
-        startSlide(1500);
+        startSlide(3000);
     };
     slider();
 
