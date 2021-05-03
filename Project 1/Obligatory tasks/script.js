@@ -52,22 +52,7 @@ let isNumber = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 //maybe use for reset somehow? think about it
-// let initialState = {
-//     income: {},
-//     addIncome: [],
-//     incomeMonth: 0,
-//     expenses: {},
-//     addExpenses: [],
-//     deposit: false,
-//     percentDeposit: 0,
-//     moneyDeposit: 0,
-//     budget: 0,
-//     budgetDay: 0,
-//     budgetMonth: 0,
-//     expensesMonth: 0,
-// };
-// правильная сумма для проверки - при сумме расходов 300, бюджет на день 156
-let appData = {
+let initialState = {
     income: {},
     addIncome: [],
     incomeMonth: 0,
@@ -76,8 +61,23 @@ let appData = {
     deposit: false,
     percentDeposit: 0,
     moneyDeposit: 0,
+    budget: 0,
+    budgetDay: 0,
+    budgetMonth: 0,
+    expensesMonth: 0,
+};
+// правильная сумма для проверки - при сумме расходов 300, бюджет на день 156
+let appData = {
+    // income: {},
+    // addIncome: [],
+    // incomeMonth: 0,
+    // expenses: {},
+    // addExpenses: [],
+    // deposit: false,
+    // percentDeposit: 0,
+    // moneyDeposit: 0,
     start: function() {//repeat asking while not a number
-
+        // Object.assign(appData, initialState);
         this.budget = salaryAmount.value;
         this.getExpenses();
         this.getIncome();
@@ -88,6 +88,7 @@ let appData = {
         this.showResult();
     },
     reset: function(e){
+
         if (incomeItems.length > 1) {
             incomeItems[1].remove();
             incomeItems[2].remove();
@@ -105,19 +106,20 @@ let appData = {
             item.removeAttribute('disabled', 'true');
         });
         
-        this.budget = 0;
-        this.income = {};
-        this.addIncome = [];
-        this.incomeMonth = 0;
-        this.expenses = {};
-        this.addExpenses = [];
-        this.deposit = false;
-        this.percentDeposit = 0;
-        this.moneyDeposit = 0;
-        this.budget = 0;
-        this.budgetDay = 0;
-        this.budgetMonth = 0;
-        this.expensesMonth = 0;
+        Object.assign(appData, initialState);
+        // this.budget = 0;
+        // this.income = {};
+        // this.addIncome = [];
+        // this.incomeMonth = 0;
+        // this.expenses = {};
+        // this.addExpenses = [];
+        // this.deposit = false;
+        // this.percentDeposit = 0;
+        // this.moneyDeposit = 0;
+        // this.budget = 0;
+        // this.budgetDay = 0;
+        // this.budgetMonth = 0;
+        // this.expensesMonth = 0;
     },
     showResult: function() {
         const _this = this;
@@ -199,10 +201,10 @@ let appData = {
             // g is global search, not only first appearance
             //appData.addExpenses = addExpenses.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()).split(', ');
     },
-    budget: 0,
-    budgetDay: 0,
-    budgetMonth: 0,
-    expensesMonth: 0,
+    // budget: 0,
+    // budgetDay: 0,
+    // budgetMonth: 0,
+    // expensesMonth: 0,
     getExpensesMonth: function() {
         // просуммировали расходы
         for (let key in this.expenses) {
@@ -301,6 +303,9 @@ periodSelect.addEventListener('change', function(e) {
     periodAmount.textContent = e.target.value;
 });
 
+console.log(appData);
+Object.assign(appData, initialState);
+// console.log(appData);
 //Delete these logs?
 //console.log(addExpenses.length);
 
