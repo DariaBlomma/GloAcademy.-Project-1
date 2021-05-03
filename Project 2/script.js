@@ -214,19 +214,22 @@ window.addEventListener('DOMContentLoaded', () => {
                     popupHandler();
                 }
             }
-            if (target.classList.contains('popup-close')) {
-                if (window.innerWidth > 768) {
-                    popupHide();
-                } else {
-                    popupHandler();
-                }
-            } else {
-                target = target.closest('.popup-content');
-                if (!target && !event.target.matches('.popup-btn')) {
+
+            if (target.matches('.popup')) {
+                if (target.classList.contains('popup-close')) {
                     if (window.innerWidth > 768) {
                         popupHide();
                     } else {
                         popupHandler();
+                    }
+                } else {
+                    target = target.closest('.popup-content');
+                    if (!target && !event.target.matches('.popup-btn')) {
+                        if (window.innerWidth > 768) {
+                            popupHide();
+                        } else {
+                            popupHandler();
+                        }
                     }
                 }
             }
@@ -516,8 +519,9 @@ window.addEventListener('DOMContentLoaded', () => {
             const emailFields = document.querySelectorAll('[type="email"]');
             emailFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/[^A-z]+[^@\-\_\.\!\~\*\']*/ig, '');
+                    target.value = target.value.replace(/[^a-z-@_.!~*']/ig, '');
                     // [^A-z][^@-_\.!~\*']
+                    // /[^A-z]+[^@\-\_\.\!\~\*\']*/ig
                 }
             });
         };
@@ -527,7 +531,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const telFields = document.querySelectorAll('[type="tel"');
             telFields.forEach(item => {
                 if (item === target) {
-                    target.value = target.value.replace(/\D[^-()]/g, '');
+                    target.value = target.value.replace(/[^-()\d]/g, '');
+                    // /\D[^-()]/g
                 }
             });
         };
