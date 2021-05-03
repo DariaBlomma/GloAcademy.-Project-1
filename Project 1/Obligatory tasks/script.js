@@ -88,7 +88,6 @@ let appData = {
         this.showResult();
     },
     reset: function(e){
-
         if (incomeItems.length > 1) {
             incomeItems[1].remove();
             incomeItems[2].remove();
@@ -107,6 +106,7 @@ let appData = {
         });
         
         Object.assign(appData, initialState);
+        // Object.assign(this, new constructor())
         // this.budget = 0;
         // this.income = {};
         // this.addIncome = [];
